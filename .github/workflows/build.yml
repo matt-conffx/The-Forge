@@ -18,11 +18,12 @@ jobs:
       with:
         path: Custom-Middleware
         
-    - name: Run PRE_BUILD
-      working-directory: The-Forge
-      shell: cmd
-      run: PRE_BUILD.bat
+#    - name: Run PRE_BUILD
+#      working-directory: The-Forge
+#      shell: cmd
+#      run: PRE_BUILD.bat
       
     - name: Build Windows
       working-directory: The-Forge
+      shell: cmd
       run: python -u ./CI/PyBuild.py
