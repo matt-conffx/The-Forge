@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # Copyright (c) 2017-2022 The Forge Interactive Inc.
-# 
+#
 # This file is part of The-Forge
 # (see https://github.com/ConfettiFX/The-Forge).
-# 
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -11,9 +11,9 @@
 # to you under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in compliance
 # with the License.  You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing,
 # software distributed under the License is distributed on an
 # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -86,13 +86,13 @@ def PrintResults():
 		print ("Successful Builds list:")
 		for build in successfulBuilds:
 			print(build['name'], build['conf'], build['platform'])
-	
+
 	print ("")
 	if len(failedBuilds) > 0:
 		print ("Failed Builds list:")
 		for build in failedBuilds:
 			print(build['name'], build['conf'], build['platform'])
-			
+
 	if len(successfulTests) > 0:
 		print ("Successful tests list:")
 		for test in successfulTests:
@@ -100,7 +100,7 @@ def PrintResults():
 				print(test['name'])
 			else:
 				print(test['name'], test['gpu'])
-	
+
 	print ("")
 	if len(failedTests) > 0:
 		print ("Failed Tests list:")
@@ -126,7 +126,7 @@ def FindMSBuild17():
 		#check if vswhere opened correctly
 		if proc.returncode != 0:
 			print("Could not find vswhere")
-		else:			
+		elif ls_output != "":
 			msbuildPath = ls_output.strip() + "/MSBuild/15.0/Bin/MSBuild.exe"
 
 	except Exception as ex:
@@ -134,11 +134,11 @@ def FindMSBuild17():
 		print(ex)
 		print(ls_output)
 		print("Could not find vswhere")
-	
+
 	return msbuildPath
 
-#define string is a list of #defines separated by \n. 
-#Example: #define ACTIVE_TESTING_GPU 1\n#define AUTOMATED_TESTING 1\n 
+#define string is a list of #defines separated by \n.
+#Example: #define ACTIVE_TESTING_GPU 1\n#define AUTOMATED_TESTING 1\n
 def AddPreprocessorToFile(filePath, defineString, stringToReplace):
 	if not os.path.exists(filePath):
 		return
@@ -169,10 +169,10 @@ def RemovePreprocessorFromFile(filePath, definesList):
 				if define in line:
 					writeLine = False
 					break
-			
-			if writeLine == True:		
+
+			if writeLine == True:
 					f.write(line)
-		
+
 			f.truncate()
 
 # options is a list of (string, bool) pairs
@@ -201,10 +201,10 @@ def RemoveConfigOptions(configPath, options):
 			remove_opt = None
 			for j,(opt, _) in enumerate(options):
 				# Check for the exact match of the option
-				# For example without newline and space 
+				# For example without newline and space
 				# option ENABLE_AB would be triggered by option ENABLE_A
 				opt = f" {opt}\n"
-				
+
 				if opt in line:
 					# Format:
 					#[i-2]:.*\n
@@ -217,19 +217,19 @@ def RemoveConfigOptions(configPath, options):
 					lines[i+1] = ''
 					remove_opt = j
 					break
-			
+
 			if remove_opt != None:
 				options.pop(remove_opt)
 				if not options:
 					break
-		
+
 		f.seek(0)
 		for line in lines:
 			f.write(line)
 		f.truncate()
 
 
-def AddTestingPreProcessor(enabledGpuSelection):	
+def AddTestingPreProcessor(enabledGpuSelection):
 	if setDefines == True:
 		print("Adding Automated testing preprocessor defines")
 		macro = "#define AUTOMATED_TESTING 1"
@@ -240,7 +240,7 @@ def AddTestingPreProcessor(enabledGpuSelection):
 	if config_file_options:
 		print('Adding config options preprocessor defines')
 		AddConfigOptions("Common_3/OS/Core/Config.h", config_file_options)
-	
+
 
 def RemoveTestingPreProcessor():
 	testingDefines = ["#define AUTOMATED_TESTING", "#define ACTIVE_TESTING_GPU"]
@@ -252,14 +252,14 @@ def RemoveTestingPreProcessor():
 	if config_file_options:
 		print('Removing config options preprocessor defines')
 		RemoveConfigOptions("Common_3/OS/Core/Config.h", config_file_options)
-	
+
 def ExecuteTimedCommand(cmdList, printStdout: bool):
-	try:		
-		if isinstance(cmdList, list): 
+	try:
+		if isinstance(cmdList, list):
 			print("Executing Timed command: " + ' '.join(cmdList))
 		else:
-			print("Executing Timed command: " + cmdList)		
-		
+			print("Executing Timed command: " + cmdList)
+
 		captureOutput = (printStdout == False)
 
 		#10 minutes timeout
@@ -272,10 +272,10 @@ def ExecuteTimedCommand(cmdList, printStdout: bool):
 		return (-1, "Command killed due to Timeout".encode(encoding='utf8'), "".encode(encoding='utf8')) # error return code
 	except Exception as ex:
 		print("-------------------------------------")
-		if isinstance(cmdList, list): 
+		if isinstance(cmdList, list):
 			print("Failed Executing Timed command: " + ' '.join(cmdList))
 		else:
-			print("Failed Executing Timed command: " + cmdList)	
+			print("Failed Executing Timed command: " + cmdList)
 		print(ex)
 		print("-------------------------------------")
 		return (-1, f"{ex}".encode(encoding='utf8'), "".encode(encoding='utf8')) # error return code
@@ -284,7 +284,7 @@ def ExecuteCommandWOutput(cmdList, printException = True):
 	try:
 		print("")
 		print("Executing command: " + ' '.join(cmdList))
-		print("") 
+		print("")
 		ls_lines = subprocess.check_output(cmdList).splitlines()
 		return ls_lines
 	except Exception as ex:
@@ -294,12 +294,12 @@ def ExecuteCommandWOutput(cmdList, printException = True):
 			print(ex)
 			print("-------------------------------------")
 		return ""  #return error
-	
+
 	return ""
 
 def XBoxCommand(cmdList, verbose=True):
 	if verbose:
-		print("Executing command: " + ' '.join(cmdList))		
+		print("Executing command: " + ' '.join(cmdList))
 	try:
 		ls_lines = subprocess.check_output(cmdList).splitlines()
 		return [ line.decode('utf-8') for line in ls_lines]
@@ -308,35 +308,35 @@ def XBoxCommand(cmdList, verbose=True):
 		print("Failed Executing command: " + ' '.join(cmdList))
 		print(ex)
 		print("-------------------------------------")
-		return [""] 
+		return [""]
 
 def ExecuteCommand(cmdList,outStream):
 	try:
 		print("")
-		if isinstance(cmdList, list): 
+		if isinstance(cmdList, list):
 			print("Executing command: " + ' '.join(cmdList))
 		else:
-			print("Executing command: " + cmdList)		
-		print("") 
+			print("Executing command: " + cmdList)
+		print("")
 		proc = subprocess.Popen(cmdList, stdout=outStream)
 		proc.wait()
 
 		return (proc.returncode, proc.stderr, proc.stdout)
 	except Exception as ex:
 		print("-------------------------------------")
-		if isinstance(cmdList, list): 
+		if isinstance(cmdList, list):
 			print("Failed Executing command: " + ' '.join(cmdList))
 		else:
-			print("Failed Executing command: " + cmdList)		
+			print("Failed Executing command: " + cmdList)
 		print(ex)
 		print("-------------------------------------")
 		return (-1, f"{ex}".encode(encoding='utf8'), "".encode(encoding='utf8')) # error return code
-	
+
 def ExecuteCommandErrorOnly(cmdList):
 	try:
 		print("")
 		print("Executing command: " + ' '.join(cmdList))
-		print("") 
+		print("")
 		DEVNULL = open(os.devnull, 'w')
 		proc = subprocess.Popen(cmdList, stdout=DEVNULL, stderr=subprocess.STDOUT)
 		proc.wait()
@@ -349,7 +349,7 @@ def ExecuteCommandErrorOnly(cmdList):
 		print(ex)
 		print("-------------------------------------")
 		return -1  #error return code
-	
+
 	return 0 #success error code
 
 def CheckTest(test, fileName, gpuLine, check_ub_error, is_iOS):
@@ -400,13 +400,13 @@ def CheckTest(test, fileName, gpuLine, check_ub_error, is_iOS):
 
 def ExecuteBuild(cmdList, fileName, configuration, platform):
 	returnCode = ExecuteCommand(cmdList, sys.stdout)[0]
-	
+
 	if returnCode != 0:
 		print("FAILED BUILDING ", fileName, configuration)
 		failedBuilds.append({'name':fileName,'conf':configuration, 'platform':platform})
 	else:
 		successfulBuilds.append({'name':fileName,'conf':configuration, 'platform':platform})
-	
+
 	return returnCode
 
 def ExecuteTest(cmdList, fileName, regularCommand, gpuLine = "", printStdout: bool = False, check_ub_error = False, is_iOS = False):
@@ -432,7 +432,7 @@ def GetBundleIDFromIOSApp(filename):
 
 		fileContents = ExecuteCommandWOutput(["plutil", "-convert", "json", "-o", "-", "--",filename])
 		fileContents = (b"".join(fileContents)).decode('utf-8')
-		
+
 		if fileContents == "":
 			return fileContents
 		plistJson = json.loads(fileContents)
@@ -530,7 +530,7 @@ def selectActiveGpuConfig(forgeDir, projRootFolder, projectName, runIndex):
 	#remove file extension from project name
 	#print(projectName)
 	projectName = os.path.splitext(projectName)[0]
-	
+
 	#need to have
 	if "Unit_Tests" in projRootFolder:
 		filename = "/Examples_3/"+projRootFolder+"/src/"+projectName+"/GPUCfg/activeTestingGpu.cfg"
@@ -542,7 +542,7 @@ def selectActiveGpuConfig(forgeDir, projRootFolder, projectName, runIndex):
 	filename = filename.replace("/",os.path.sep)
 
 	filename = forgeDir + filename
-	
+
 	#create active gpu config if it doesn't exist
 	#this is only valid for our internal testing rig
 	#this way we can commit activeTestGpu files
@@ -553,7 +553,7 @@ def selectActiveGpuConfig(forgeDir, projRootFolder, projectName, runIndex):
 			os.makedirs(dirName)
 		f = open(filename, "w+")
 		f.write(activeGpusConfiguration)
-		
+
 	removedMatch = False
 	foundMatch = False
 	lineMatch = ""
@@ -565,7 +565,7 @@ def selectActiveGpuConfig(forgeDir, projRootFolder, projectName, runIndex):
 				originalActiveGpuConfigLines.append(line)
 				if not line.startswith('#'):
 					return {'running':True, 'lineMatch': line}
-		
+
 		for i, line in enumerate(lines):
 			if not line.strip():
 				continue
@@ -577,8 +577,8 @@ def selectActiveGpuConfig(forgeDir, projRootFolder, projectName, runIndex):
 				print("Found line", line)
 				lineMatch = line
 				foundMatch = True
-				break		
-		
+				break
+
 		if foundMatch:
 			f.seek(0)
 			for line in lines:
@@ -588,7 +588,7 @@ def selectActiveGpuConfig(forgeDir, projRootFolder, projectName, runIndex):
 			f.truncate()
 			for line in originalActiveGpuConfigLines:
 				f.write(line)
-				
+
 	#if we are done then we can remove the file
 	if not foundMatch and os.path.exists(filename):
 		try:
@@ -607,7 +607,7 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 	iosApps = []
 	osxApps = []
 	appsToTest = []
-	
+
 	config = "Debug" if sanitizer_pass else "Release"
 
 	for proj in projects:
@@ -620,7 +620,7 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 
 	if iosTesting:
 		appsToTest = iosApps
-		
+
 	if macOSTesting:
 		appsToTest.extend(osxApps)
 
@@ -641,7 +641,7 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 		#get working directory (excluding the xcodeproj in path)
 		rootPath = os.sep.join(app.split(os.sep)[0:-1])
 		filename = app.split(os.sep)[-1].split(os.extsep)[0]
-		
+
 		#save current work dir
 		currDir = os.getcwd()
 		#change dir to xcodeproj location
@@ -663,7 +663,7 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 			if has_device_id:
 				command.append("--id")
 				command.append(iosDeviceId)
-			
+
 			#run with benchmarking mode if specified
 			if benchmarkFrames > 0:
 				command.append("-a")
@@ -686,7 +686,7 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 				if has_device_id:
 					logDownloadCommand.append("--id")
 					logDownloadCommand.append(iosDeviceId)
-					
+
 				logDownloaded = ExecuteCommand(logDownloadCommand, sys.stdout)[0]
 				if logDownloaded == 0:
 					iosLogFile = "Library/Application Support/" + logFile
@@ -695,30 +695,30 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 					print("[Error] Log file could not be downloaded for:" + bundleID)
 
 				if retCode == 0:
-					leaksDetected = FindMemoryLeaks("Library/Application Support/"+ memleakFile)										
+					leaksDetected = FindMemoryLeaks("Library/Application Support/"+ memleakFile)
 					if benchmarkFrames > 0:
 						benchmarkData = RecordBenchmarkFilePath("IOS", filename.split(".")[0].split("_iOS")[0], "Library/Application Support/")
 						print(benchmarkData)
-				
+
 				#uninstall bundle if bundle id was found
 				command = ["ios-deploy","--uninstall_only","--bundle_id",bundleID]
 				ExecuteCommand(command, sys.stdout)
 			else:
 				print("[Error] Bundle ID NOT found:" + bundleID)
-				
+
 		else:
 			command = ["./" + filename + ".app/Contents/MacOS/" + filename]
 			#run with benchmarking mode if specified
 			if benchmarkFrames > 0:
 				command.append("-b")
 				command.append(str(benchmarkFrames))
-			
+
 			retCode = ExecuteTest(command, filename, False, check_ub_error=True)
 
 			tryPrintLog(logFile)
 			if retCode != 0:
 				loadedLog = False
-				# It takes a bit of time to generate a crash report. 
+				# It takes a bit of time to generate a crash report.
 				# Try every second, for 20 times. Worst case, we wait 20 seconds.
 				for _ in range(20):
 					time.sleep(1)
@@ -746,12 +746,12 @@ def TestXcodeProjects(iosTesting, macOSTesting, iosDeviceId, benchmarkFrames, sa
 				print(benchmarkData)
 
 			leaksDetected = FindMemoryLeaks(memleakFile)
-		
+
 		if retCode == 0 and leaksDetected == True:
 			lastSuccess = successfulTests.pop()
 			failedTests.append({'name':lastSuccess['name'], 'gpu':lastSuccess['gpu'], 'reason':"Memory Leaks"})
 			errorOccured = True
-			
+
 		if retCode != 0:
 			errorOccured = True
 
@@ -798,7 +798,7 @@ def CreateXcodeBuildCommand(skipMacos, skipIos, skipIosCodeSigning,path,scheme,c
 		"CODE_SIGN_ENTITLEMENTS=\"\"",
 		"CODE_SIGNING_ALLOWED=\"NO\""])
 	return command
-		
+
 def ListDirs(path):
 	return [dir for dir in os.listdir(path) if os.path.isdir(os.path.join(path,dir))]
 
@@ -816,7 +816,7 @@ def BuildXcodeProjects(skipMacos, skipIos, skipIosCodeSigning, skipDebugBuild, s
 	#since our projects for macos are all under a macos Xcode folder we can search for
 	#that specific folder name to gather source folders containing project/workspace for xcode
 	#macSourceFolders = FindFolderPathByName("Examples_3/","macOS Xcode", -1)
-	xcodeProjects = ["/Examples_3/Ephemeris/macOS Xcode/Ephemeris.xcodeproj", 
+	xcodeProjects = ["/Examples_3/Ephemeris/macOS Xcode/Ephemeris.xcodeproj",
 				"/Examples_3/Aura/macOS Xcode/Aura.xcodeproj",
 				"/Examples_3/Visibility_Buffer/macOS Xcode/Visibility_Buffer.xcodeproj",
 				"/Examples_3/Unit_Tests/macOS Xcode/Unit_Tests.xcworkspace"]
@@ -868,7 +868,7 @@ def BuildXcodeProjects(skipMacos, skipIos, skipIosCodeSigning, skipDebugBuild, s
 		for conf in buildConfigurations:
 			#will build all targets for vien project
 			#canot remove ios / macos for now
-			
+
 			for scheme in schemesList:
 				command = CreateXcodeBuildCommand(skipMacos,skipIos,skipIosCodeSigning,filenameWExt,scheme,conf,isWorkspace,DDpath,printXcodeBuild,ubsan,asan,tsan)
 
@@ -894,7 +894,7 @@ def BuildXcodeProjects(skipMacos, skipIos, skipIosCodeSigning, skipDebugBuild, s
 #If it is in ~/.profile then it needs to be maintaned by updating the version number in ~/.profile.
 def BuildLinuxProjects():
 	errorOccured = False
-	
+
 	projsToBuild = GetFilesPathByExtension("./Examples_3/","workspace", False)
 	for projectPath in projsToBuild:
 		#get working directory (excluding the workspace in path)
@@ -904,11 +904,11 @@ def BuildLinuxProjects():
 		#change dir to workspace location
 		os.chdir(rootPath)
 		configurations = ["Debug", "Release"]
-		for conf in configurations:					
+		for conf in configurations:
 			#create command for xcodebuild
 			#filename = projectPath.split(os.sep)[-1].split(os.extsep)[0]
 			filename = projectPath.split(os.sep)[-1]
-			
+
 			#need to parse xml configuration to get every project
 			xmlTree = ET.parse("./"+filename)
 			xmlRoot = xmlTree.getroot()
@@ -918,24 +918,24 @@ def BuildLinuxProjects():
 				if child.tag == "Project":
 					if child.attrib["Name"] != "OSBase" and child.attrib["Name"] != "EASTL" and child.attrib["Name"] != "OS" and child.attrib["Name"] != "Renderer" and  child.attrib["Name"] != "SpirVTools" and child.attrib["Name"] != "PaniniProjection" and child.attrib["Name"] != "gainput" and child.attrib["Name"] != "ozz_base" and child.attrib["Name"] != "ozz_animation" and child.attrib["Name"] != "Assimp" and child.attrib["Name"] != "zlib" and child.attrib["Name"] != "LuaManager" and child.attrib["Name"] != "AssetPipeline" and child.attrib["Name"] != "AssetPipelineCmd" and child.attrib["Name"] != "ozz_animation_offline":
 						ubuntuProjects.append(child.attrib["Name"])
-			
+
 			for proj in ubuntuProjects:
 				command = ["codelite-make","-w",filename,"-p", proj,"-c",conf]
 				#sucess = ExecuteBuild(command, filename+"/"+proj,conf, "Ubuntu")
 				sucess = ExecuteCommand(command, sys.stdout)[0]
-				
+
 				if sucess != 0:
 					errorOccured = True
-				
+
 				command = ["make", "-s"]
 				sucess = ExecuteBuild(command, filename+"/"+proj,conf, "Ubuntu")
-				
+
 				if sucess != 0:
 					errorOccured = True
 
 		#set working dir to initial
 		os.chdir(currDir)
-	
+
 	if errorOccured == True:
 		return -1
 	return 0
@@ -946,7 +946,7 @@ def BuildLinuxProjects():
 #If it is in ~/.profile then it needs to be maintaned by updating the version number in ~/.profile.
 def TestLinuxProjects(benchmarkFrames):
 	errorOccured = False
-	
+
 	projsToTest = GetFilesPathByExtension("./Examples_3/","workspace", False)
 	for projectPath in projsToTest:
 		#get working directory (excluding the workspace in path)
@@ -958,7 +958,7 @@ def TestLinuxProjects(benchmarkFrames):
 		configurations = ["Release"]
 		for conf in configurations:
 			filename = projectPath.split(os.sep)[-1].split(os.extsep)[0]
-			
+
 			#need to parse xml configuration to get every project
 			xmlTree = ET.parse("./"+filename + ".workspace")
 			xmlRoot = xmlTree.getroot()
@@ -972,29 +972,29 @@ def TestLinuxProjects(benchmarkFrames):
 					ubuntuProjects.append(child.attrib["Name"])
 					# get the directory where the project is stored, remove 'projectName.project' from the end
 					ubuntuProjectDirs.append(child.attrib["Path"][:-len(child.attrib["Name"] + ".project")])
-			
+
 			for projIndex, proj in enumerate(ubuntuProjects):
-				leaksDetected = False	
+				leaksDetected = False
 				exePath = os.path.join(os.getcwd(),ubuntuProjectDirs[projIndex],conf,proj)
-				command = ["gdb", "-q", "-ex", "r", "-ex", "bt", "-ex", "print $_exitcode", "-batch", "-return-child-result", "--args", exePath] 
-				
+				command = ["gdb", "-q", "-ex", "r", "-ex", "bt", "-ex", "print $_exitcode", "-batch", "-return-child-result", "--args", exePath]
+
 				#run with benchmarking mode if specified
 				if benchmarkFrames > 0:
 					command.append("-b")
 					command.append(str(benchmarkFrames))
-				
+
 				retCode = ExecuteTest(command, proj, False, "", True)
 
 				if retCode != 0:
 					errorOccured = True
-				
+
 				if not errorOccured and benchmarkFrames > 0:
 					benchmarkData = RecordBenchmarkFilePath("Ubuntu", proj, os.path.join(os.getcwd(),proj,conf))
 					print(benchmarkData)
 
 				memleaksFilename = os.path.join(os.getcwd(),proj,conf,GetMemLeakFile(proj))
 				leaksDetected = FindMemoryLeaks(memleaksFilename)
-				
+
 				if retCode == 0 and leaksDetected == True:
 					lastSuccess = successfulTests.pop()
 					failedTests.append({'name':lastSuccess['name'], 'gpu':lastSuccess['gpu'], 'reason':"Memory Leaks"})
@@ -1002,7 +1002,7 @@ def TestLinuxProjects(benchmarkFrames):
 
 		#set working dir to initial
 		os.chdir(currDir)
-	
+
 	if errorOccured == True:
 		return -1
 	return 0
@@ -1019,7 +1019,7 @@ def AppendToLogFilename(logName, stringToAppend):
 				print("Removing existing {0}".format(newLogName))
 				os.remove(newLogName)
 			os.rename(logName, newLogName)
-		except Exception as ex: 
+		except Exception as ex:
 			print("Error Renaming {0} to {1}".format(logName, newLogName))
 			print(ex)
 
@@ -1029,12 +1029,12 @@ def ReadWindowsLogAndLeaks(logFilename, memleakFile):
 		with open(logFile) as f:
 			for line in f:
 				print(line, end="")
-	
+
 	return FindMemoryLeaks(memleakFile)
 
 def TestWindowsProjects(useActiveGpuConfig, benchmarkFrames):
 	errorOccured = False
-	
+
 	isWindows7 = int(platform.release()) < 10
 	projects = GetFilesPathByExtension("./Examples_3","exe",False)
 	fileList = []
@@ -1079,13 +1079,13 @@ def TestWindowsProjects(useActiveGpuConfig, benchmarkFrames):
 			filename = "Dx12_" + filename
 
 		parentFolder = proj.split(os.sep)[1]
-		
+
 		# get the memory leak file path
 		memleakFile = GetMemLeakFile(origFilename)
 		# delete the memory leak file before execute the app
 		if os.path.exists(memleakFile):
 			os.remove(memleakFile)
-		
+
 		if useActiveGpuConfig == True and "hlslparser" not in proj:
 			currentGpuRun = 0
 			resultGpu = selectActiveGpuConfig(currDir, parentFolder,origFilename,currentGpuRun)
@@ -1110,17 +1110,17 @@ def TestWindowsProjects(useActiveGpuConfig, benchmarkFrames):
 		elif benchmarkFrames > 0:
 			benchmarkData = RecordBenchmarkFilePath("Windows", origFilename.split(".")[0], ".")
 			print(benchmarkData)
-				
+
 		os.chdir(currDir)
 
 	if errorOccured == True:
 		return -1
-	return 0	
+	return 0
 
 def TestXboxProjects(benchmarkFrames):
 	errorOccured = False
 	FNULL = open(os.devnull, 'w')
-	
+
 	#Get console IP
 	consoleIP = ""
 	gdkDir = os.environ['GameDK'] + 'bin/'
@@ -1131,7 +1131,7 @@ def TestXboxProjects(benchmarkFrames):
 	if connection:
 		consoleIP = connection.group(1)
 		consoleIP = consoleIP.decode('utf-8')
-	
+
 	for output_line in output.split(b'\n'):
 		if b"TITLE: Unreachable." in output_line:
 			print ("Unable to connect to: "+consoleIP)
@@ -1150,13 +1150,13 @@ def TestXboxProjects(benchmarkFrames):
 	for line in applist:
 		if isDashboard == True and "Dashboard" in line and "Application" in line:
 			homePackageName = line.strip()
-			print(line) 
+			print(line)
 			break
 		elif isDashboard == False and "DevHome" in line and "Application" in line:
 			homePackageName = line.strip()
-			print(line) 
+			print(line)
 			break
-	
+
 	#Cleanup the shared folders before launching the test
 	crashdump_path = '\\\\'+consoleIP+"\SystemScratch\LocalDumps"
 	shaderFolder = 	'\\\\'+consoleIP+"\SystemScratch\CompiledShaders"
@@ -1193,7 +1193,7 @@ def TestXboxProjects(benchmarkFrames):
 	except Exception as ex:
 		print(ex)
 		crashDumpCount = 0
-	
+
 	#get paths for exe in Loose folder
 	projects = GetFilesPathByExtension("Xbox/Examples_3", "exe", False)
 	fileList = []
@@ -1296,13 +1296,13 @@ def TestXboxProjects(benchmarkFrames):
 			failedTests.append({'name':appName, 'gpu':"", 'reason':"Runtime failure"})
 		else:
 			testingComplete = True
-			
+
 			#Wait for crash dump folder to be discoverable and get count of crash dumps
 			command = ["cmd", "/c", "dir", crashdump_path]
 			rc = 1
 			#Create a crashdump directory if it doesn't exist
 			if not os.path.exists(crashdump_path):
-				os.mkdir(crashdump_path)    
+				os.mkdir(crashdump_path)
 			while rc != 0:
 				rc = subprocess.call(command, stdin=None, stdout=FNULL, stderr=FNULL)
 			output = XBoxCommand(command, False)
@@ -1327,9 +1327,9 @@ def TestXboxProjects(benchmarkFrames):
 			if testingComplete and benchmarkFrames > 0:
 				benchmarkData = RecordBenchmarkFilePath("Xbox", filenameWithoutExe, systemScratchPath)
 				print(benchmarkData)
-			
+
 			leaksDetected = FindMemoryLeaks(memleakPath)
-			
+
 			if testingComplete and leaksDetected == True:
 				errorOccured = True
 				failedTests.append({'name':appName, 'gpu':"", 'reason':"Memory Leaks"})
@@ -1340,7 +1340,7 @@ def TestXboxProjects(benchmarkFrames):
 				errorOccured = True
 				print ("Application Terminated Early: " + appName + "\n")
 				failedTests.append({'name': appName, 'gpu': "", 'reason': "Runtime failure"})
-		
+
 		logFilePath = f"\\\\{consoleIP}\\SystemScratch\\" + filenameWithoutExe + ".log"
 		if os.path.exists(logFilePath) and os.path.isfile(logFilePath):
 			with open(logFilePath) as f:
@@ -1367,7 +1367,7 @@ def TestXboxProjects(benchmarkFrames):
 						return None
 					return cdbOutput[parseBegin:parseEnd]
 				return cdbOutput
-			
+
 			print("Stack Trace:")
 			stackOutput = ExecuteCdb("!sym noisy;.lines -e;.reload /f;!analyze -v", 60, True, "STACK_TEXT:")
 			print(stackOutput)
@@ -1393,7 +1393,7 @@ def TestXboxProjects(benchmarkFrames):
 
 def TestNintendoSwitchProjects(benchmarkFrames, sanitizer_pass):
 	errorOccured = False
-	
+
 	switchToolsDir = os.environ['NINTENDO_SDK_ROOT'] + '/Tools/CommandLineTools/'
 	controlTargetExe = os.path.join(switchToolsDir, "ControlTarget.exe")
 	runOnTargetExe = os.path.join(switchToolsDir, "RunOnTarget.exe")
@@ -1436,7 +1436,7 @@ def TestNintendoSwitchProjects(benchmarkFrames, sanitizer_pass):
 			command = [controlTargetExe, "reset"]
 			ExecuteCommand(command, None)
 			errorOccured = True
-		
+
 		try:
 			log = str(readLogProc.communicate(timeout=5)[0])
 		except subprocess.TimeoutExpired:
@@ -1473,7 +1473,7 @@ def TestNintendoSwitchProjects(benchmarkFrames, sanitizer_pass):
 def TestOrbisProjects(benchmarkFrames, sanitizer_pass):
 	errorOccured = False
 	FNULL = open(os.devnull, 'w')
-	
+
 	orbis_server = ET.parse(os.environ["LOCALAPPDATA"] + "/SCE/ORTM/Server.xml")
 	cache_data = orbis_server.getroot().find("Cache").find("CacheData")
 
@@ -1503,16 +1503,16 @@ def TestOrbisProjects(benchmarkFrames, sanitizer_pass):
 		# delete the memory leak file before execute the app
 		if os.path.exists(memleakFile):
 			os.remove(memleakFile)
-		
+
 		command = ["orbis-run.exe", "/elf", filename]
-		
+
 		if sanitizer_pass:
 			command.append("UBSAN_OPTIONS=ps4_break_on_error=true")
 
 		if benchmarkFrames > 0:
 			command.append("-b")
 			command.append(f"{benchmarkFrames}")
-		
+
 		retCode = ExecuteTest(command, appName, False)
 
 		logFileData = ""
@@ -1549,7 +1549,7 @@ def TestOrbisProjects(benchmarkFrames, sanitizer_pass):
 						if processId == dumpProcessId:
 							targetDumpFile = dumpFile
 							break
-				
+
 				# Analyze coredump
 				if targetDumpFile != None:
 					print("\n***\nCrash Log\n***\n")
@@ -1586,7 +1586,7 @@ def TestOrbisProjects(benchmarkFrames, sanitizer_pass):
 def TestProsperoProjects(benchmarkFrames, sanitizer_pass):
 	errorOccured = False
 	FNULL = open(os.devnull, 'w')
-	
+
 	#get paths for exe in Loose folder
 	projects = GetFilesPathByExtension("Prospero/Examples_3","elf",False)
 	fileList = []
@@ -1639,7 +1639,7 @@ def TestProsperoProjects(benchmarkFrames, sanitizer_pass):
 			if len(dumpFiles) > 0:
 				dumpFile = dumpFiles[0]
 				targetDumpFile = dumpFile
-			
+
 			# Analyze coredump
 			if targetDumpFile != None:
 				print("\n***\nCrash Log\n***\n")
@@ -1662,7 +1662,7 @@ def TestProsperoProjects(benchmarkFrames, sanitizer_pass):
 					print(f"Failed write a temporary coreview script file due to {e}")
 			else:
 				print("Couldn't find core dump file")
-				
+
 			processKillCmd = [ "prospero-ctrl", "process", "kill", "/process:" + elfName ]
 			ExecuteCommand(processKillCmd, None)
 
@@ -1674,7 +1674,7 @@ def TestProsperoProjects(benchmarkFrames, sanitizer_pass):
 	if errorOccured:
 		return -1
 
-	return 0    
+	return 0
 
 def AndroidADBCheckRunningProcess(adbCommand, processName, packageName):
 	output = processName
@@ -1683,7 +1683,7 @@ def AndroidADBCheckRunningProcess(adbCommand, processName, packageName):
 		output = ExecuteCommandWOutput(adbCommand, False)
 		output = (b"".join(output)).decode('utf-8')
 		print(output)
-		
+
 		# try to match the number of leaks. if this doesn't match a valid ressult then no leaks were detected.
 		runningMatch = re.findall(r"(S|D)\s+com.forge.unittest", output, re.MULTILINE | re.IGNORECASE)
 		print(runningMatch)
@@ -1693,17 +1693,17 @@ def AndroidADBCheckRunningProcess(adbCommand, processName, packageName):
 			#try to print only section containing the source of leaks
 			if value == "D":
 				return True
-		
+
 		if processName not in output:
 			waitingForExit = False
-		
+
 	return True
 
 def TestAndroidProjects(benchmarkFrames, quest):
 	errorOccured = False
 
 	lowEndExamples = ["Transformations", "FontRendering", "ZipFileSystem", "UserInterface", "EntityComponentSystem"]
-    
+
 	solutionPath = "./Examples_3/Unit_Tests/Android_VisualStudio2017" if not quest else "./Examples_3/Unit_Tests/Quest_VisualStudio2017"
 	solutionDir = "Android_VisualStudio2017" if not quest else "Quest_VisualStudio2017"
 
@@ -1727,7 +1727,7 @@ def TestAndroidProjects(benchmarkFrames, quest):
 
 		#save root directory where python is executed from
 		currDir = os.getcwd()
-		
+
 		apkName = proj.split(os.sep)[-1]
 		filenameNoExt = apkName.split('.')[0]
 		fullAppName = "com.forge.unittest." + filenameNoExt
@@ -1739,7 +1739,7 @@ def TestAndroidProjects(benchmarkFrames, quest):
 		uninstallCommand = ["adb", "uninstall",fullAppName]
 		grepPSCommand = ["adb", "shell", "ps","| grep", fullAppName]
 		installCommand = ["adb", "install", "-r", apkName]
-		runCommand = ["adb", "shell", "am", "start", "-W"] 
+		runCommand = ["adb", "shell", "am", "start", "-W"]
 		if benchmarkFrames > 0:
 			runCommand.append("-e")
 			runCommand.append("-b")
@@ -1752,22 +1752,22 @@ def TestAndroidProjects(benchmarkFrames, quest):
 		lockScreenCommand = ["adb", "shell","input" ,"keyevent", "82", "&&", "adb", "shell", "input" ,"keyevent", "26", "&&", "adb", "shell", "input" ,"keyevent", "26"]
 		disableProximitySensorCommand = ["adb", "shell","am" ,"broadcast", "-a", "com.oculus.vrpowermanager.prox_close"]
 		enableProximitySensorCommand = ["adb", "shell","am" ,"broadcast", "-a", "com.oculus.vrpowermanager.automation_disable"]
-		
+
 		def GetAndroidKeyEventCmd(key):
 			return ["adb", "shell","input" ,"keyevent", key]
-			
+
 		def LockScreenCmd():
 			ExecuteCommand(GetAndroidKeyEventCmd("82"), None)
 			ExecuteCommand(GetAndroidKeyEventCmd("26"), None)
 			if quest:
 				ExecuteCommand(enableProximitySensorCommand, None)
-			
+
 		def UnlockScreenCmd():
 			ExecuteCommand(GetAndroidKeyEventCmd("26"), None)
 			ExecuteCommand(GetAndroidKeyEventCmd("82"), None)
 			if quest:
 				ExecuteCommand(disableProximitySensorCommand, None)
-		
+
 		retCode = ExecuteCommand(uninstallCommand, None)[0]
 		retCode = ExecuteCommand(installCommand, sys.stdout)[0]
 		ExecuteCommand(clearLogCatCommand, None)
@@ -1775,8 +1775,8 @@ def TestAndroidProjects(benchmarkFrames, quest):
 		retCode = ExecuteTest(runCommand, filenameNoExt, True)
 		AndroidADBCheckRunningProcess(grepPSCommand, filenameNoExt, apkName)
 		time.sleep(2)
-		output = ExecuteCommandWOutput(logCatCommand)	
-		output = (b"\n".join(output).decode('utf-8'))	
+		output = ExecuteCommandWOutput(logCatCommand)
+		output = (b"\n".join(output).decode('utf-8'))
 		print(output)
 
 		if "Success terminating application" not in output:
@@ -1784,7 +1784,7 @@ def TestAndroidProjects(benchmarkFrames, quest):
 			lastSuccess = successfulTests.pop()
 			failedTests.append({'name':lastSuccess['name'], 'gpu':lastSuccess['gpu'], 'reason':"Runtime Failure"})
 		else : retCode = 0
-			
+
 		ExecuteCommand(stopAppCommand, sys.stdout)
 		LockScreenCmd()
 
@@ -1797,7 +1797,7 @@ def TestAndroidProjects(benchmarkFrames, quest):
 			if len(logFiles) > 0:
 				logFilePath = logFiles[0]
 				#remove extension and get base name of path (everything to left of last // gets remoed)
-				appName = os.path.basename(os.path.normpath(logFilePath.split('.log')[0]))				
+				appName = os.path.basename(os.path.normpath(logFilePath.split('.log')[0]))
 			#get memleak file
 			memleakFiles = GetFilesPathByExtension("./files", "memleaks", False, 1)
 			if len(memleakFiles) > 0:
@@ -1810,20 +1810,20 @@ def TestAndroidProjects(benchmarkFrames, quest):
 			else:
 				print("Couldn't find mem leak file")
 			print()
-			
+
 			benchmarkData = RecordBenchmarkFilePath("Android", appName, "./files")
 			print(benchmarkData)
-		
-		
+
+
 		if retCode != 0:
 			print("Error while running " + filenameNoExt)
 			errorOccured = True
-				
+
 		os.chdir(currDir)
 
 	if errorOccured == True:
 		return -1
-	return 0	
+	return 0
 
 
 #this needs the JAVA_HOME environment variable set up correctly
@@ -1835,41 +1835,41 @@ def BuildAndroidProjects(skipDebug, skipRelease, printMSBuild, quest):
 
 	if skipDebug:
 		androidConfigurations.remove("Debug")
-	
+
 	if skipRelease:
 		androidConfigurations.remove("Release")
 
 	if msBuildPath == "":
 		print("Could not find MSBuild 17, Is Visual Studio 17 installed ?")
 		sys.exit(-1)
-		
+
 	solutionPath = "./Examples_3/Unit_Tests/Android_VisualStudio2017" if not quest else "./Examples_3/Unit_Tests/Quest_VisualStudio2017"
 	platformName = "Android" if not quest else "Quest"
-	
+
 	if quest:
 		if os.path.isdir("C:\\ovr_sdk_mobile_1.46.0"):
 			copy_tree("C:\\ovr_sdk_mobile_1.46.0", "Common_3\\ThirdParty\\OpenSource\\ovr_sdk_mobile_1.46.0")
 		if os.path.isdir("C:\\Vulkan-ValidationLayer-1.2.182.0"):
 			copy_tree("C:\\Vulkan-ValidationLayer-1.2.182.0", "Common_3\\ThirdParty\\OpenSource\\Vulkan-ValidationLayer-1.2.182.0")
-		
+
 
 	projects = GetFilesPathByExtension("./Jenkins/","buildproj",False)
 	fileList = []
 	for proj in projects:
 		if platformName in proj:
 			fileList.append(proj)
-	
+
 	#if MSBuild tasks were not found then parse all projects
 	if len(fileList) == 0:
 		fileList = GetFilesPathByExtension(solutionPath,"sln",False)
 
 	msbuildVerbosity = "/verbosity:minimal"
 	msbuildVerbosityClp = "/clp:ErrorsOnly;WarningsOnly;Summary"
-	
-	if printMSBuild: 
+
+	if printMSBuild:
 		msbuildVerbosity = "/verbosity:normal"
 		msbuildVerbosityClp = "/clp:Summary;PerformanceSummary"
-				
+
 	for proj in fileList:
 		#get current path for sln file
 		#strip the . from ./ in the path
@@ -1879,7 +1879,7 @@ def BuildAndroidProjects(skipDebug, skipRelease, printMSBuild, quest):
 		#need to get root folder of path by stripping the filename from path
 		rootPath = rootPath.split(os.sep)[0:-1]
 		rootPath = os.sep.join(rootPath)
-				
+
 		#save root directory where python is executed from
 		currDir = os.getcwd()
 		#change working directory to sln file
@@ -1887,7 +1887,7 @@ def BuildAndroidProjects(skipDebug, skipRelease, printMSBuild, quest):
 
 		#strip extension
 		filename = proj.split(os.sep)[-1]
-		
+
 		for platform in androidPlatform:
 			if ".sln" in proj:
 				for conf in androidConfigurations:
@@ -1901,13 +1901,13 @@ def BuildAndroidProjects(skipDebug, skipRelease, printMSBuild, quest):
 		if retCode != 0:
 			errorOccured = True
 
-		
+
 		os.chdir(currDir)
-				
+
 
 	if errorOccured == True:
 		return -1
-	return 0  
+	return 0
 
 def FilterSolutionProjects(UT_solution):
 	dependencies_filter = {
@@ -1931,7 +1931,7 @@ def FilterSolutionProjects(UT_solution):
 	f = open(UT_solution)
 	sln = f.readlines()
 	f.close()
-	
+
 	proj_hashes = set()
 	# get project hashes
 	for line in sln:
@@ -1982,10 +1982,10 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 	pcConfigurations = ["Debug", "Release"]
 	pcPlatform = "x64"
 	isWindows7 = int(platform.release()) < 10
-	
+
 	if skipDebug:
 		pcConfigurations.remove("Debug")
-		
+
 	if skipRelease:
 		pcConfigurations.remove("Release")
 
@@ -2004,12 +2004,12 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 		if "Debug" in pcConfigurations : pcConfigurations.remove("Debug")
 		if "Release" in pcConfigurations : pcConfigurations.remove("Release")
 		skipAura = True
-	
+
 
 	xboxPlatform = "Gaming.Xbox.XboxOne.x64"
 
 	projects = GetFilesPathByExtension("./Jenkins/","buildproj",False)
-	
+
 	#if MSBuild tasks were not found then parse all projects
 	if len(projects) == 0:
 		projects = GetFilesPathByExtension("./Examples_3/","sln",False)
@@ -2017,8 +2017,8 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 	fileList = []
 	msbuildVerbosity = "/verbosity:minimal"
 	msbuildVerbosityClp = "/clp:ErrorsOnly;WarningsOnly;Summary"
-	
-	if printMSBuild: 
+
+	if printMSBuild:
 		msbuildVerbosity = "/verbosity:normal"
 		msbuildVerbosityClp = "/clp:Summary;PerformanceSummary"
 
@@ -2032,7 +2032,7 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 
 		if skipAura:
 			filter_pattern += "|Aura"
-		
+
 		proj_filters = re.compile(filter_pattern)
 
 		for proj in projects:
@@ -2049,7 +2049,7 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 				continue
 			if "Xbox" in proj or "XBOXOne" in proj:
 				fileList.append(proj)
-				
+
 	if isSwitch:
 		if sanitizer_pass:
 			for proj in projects:
@@ -2058,14 +2058,14 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 					break
 
 			vcxprojects = GetFilesPathByExtension("./Switch/Examples_3/","vcxproj",False)
-			AddSanitizers(vcxprojects, ubsan, False, isSwitch=True)	
+			AddSanitizers(vcxprojects, ubsan, False, isSwitch=True)
 			solutions = GetFilesPathByExtension("./Switch/Examples_3/Unit_Tests","sln",False)
 			FilterSolutionProjects(solutions[0])
 		else:
 			for proj in projects:
 				if "Switch" in proj and not "Sanitizer_Pass" in proj:
 					fileList.append(proj)
-	
+
 	for proj in fileList:
 		if "orbis" in proj.lower():
 			continue
@@ -2086,16 +2086,16 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 		os.chdir(rootPath)
 
 		configurations = pcConfigurations
-		
+
 		#strip extension
 		filename = proj.split(os.sep)[-1]
-		
+
 		#if filename == "VisibilityBuffer.sln" or filename == "Ephemeris.sln":
 		#	if "DebugDx11" in configurations : configurations.remove("DebugDx11")
 		#	if "ReleaseDx11" in configurations : configurations.remove("ReleaseDx11")
 		#elif filename == "HLSLParser.sln":
 		#	configurations = ["Debug", "Release"]
-			
+
 		if "Xbox" in proj or "XBOXOne" in proj:
 			currPlatform = xboxPlatform
 		elif "Switch" in proj or "NX Visual Studio 2017" in proj:
@@ -2120,15 +2120,15 @@ def BuildWindowsProjects(xboxDefined, xboxOnly, skipDebug, skipRelease, printMSB
 			if isWindows7:
 				command.append("/p:WindowsTargetPlatformVersion=8.1")
 			retCode = ExecuteBuild(command, filename,"All Configurations", currPlatform)
-		
+
 		if retCode != 0:
 			errorOccured = True
-				
+
 		os.chdir(currDir)
 
 	if errorOccured == True:
 		return -1
-	return 0	
+	return 0
 
 def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 	sanitizer_pass = ubsan or asan
@@ -2137,10 +2137,10 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 
 	configurations = ["Debug", "Release"]
 	platform = "ORBIS"
-	
+
 	if skipDebug:
 		configurations.remove("Debug")
-		
+
 	if skipRelease:
 		configurations.remove("Release")
 
@@ -2151,7 +2151,7 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 		sys.exit(-1)
 
 	projects = GetFilesPathByExtension("./Jenkins/","buildproj",False)
-	
+
 	#if MSBuild tasks were not found then parse all projects
 	if len(projects) == 0:
 		projects = GetFilesPathByExtension("./Examples_3/","sln",False)
@@ -2159,7 +2159,7 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 	fileList = []
 	msbuildVerbosity = "/verbosity:minimal"
 	msbuildVerbosityClp = "/clp:ErrorsOnly;WarningsOnly;Summary"
-	
+
 	if printMSBuild:
 		msbuildVerbosity = "/verbosity:normal"
 		msbuildVerbosityClp = "/clp:Summary;PerformanceSummary"
@@ -2169,7 +2169,7 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 			if "Sanitizer_Pass_Orbis" in proj:
 				fileList.append(proj)
 				break
-		
+
 		vcxprojects = GetFilesPathByExtension("./PS4/Examples_3/","vcxproj",False)
 		AddSanitizers(vcxprojects, ubsan, asan, isOrbis=True)
 		solutions = GetFilesPathByExtension("./PS4/Examples_3/Unit_Tests","sln",False)
@@ -2178,7 +2178,7 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 		for proj in projects:
 			if "Orbis" in proj and not "Sanitizer_Pass" in proj:
 				fileList.append(proj)
-				
+
 	for proj in fileList:
 		#get current path for sln file
 		#strip the . from ./ in the path
@@ -2196,14 +2196,14 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 
 		#strip extension
 		filename = proj.split(os.sep)[-1]
-		
+
 		#hard code the configurations for Aura for now as it's not implemented for Vulkan runtime
 		if filename == "VisibilityBuffer.sln":
 			if "DebugDx11" in configurations : configurations.remove("DebugDx11")
 			if "ReleaseDx11" in configurations : configurations.remove("ReleaseDx11")
 		elif filename == "HLSLParser.sln":
 			configurations = ["Debug", "Release"]
-			
+
 		#for conf in configurations:
 		if ".sln" in filename:
 			for conf in configurations:
@@ -2212,10 +2212,10 @@ def BuildOrbisProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 		else:
 			command = [msBuildPath ,filename,"/p:Platform=" + platform,"/m", "/nr:false",msbuildVerbosityClp,msbuildVerbosity,"/t:Build"]
 			retCode = ExecuteBuild(command, filename,"All Configurations", platform)
-		
+
 		if retCode != 0:
 			errorOccured = True
-				
+
 		os.chdir(currDir)
 
 	if errorOccured == True:
@@ -2236,7 +2236,7 @@ def AddSanitizers(vcxprojects, ubsan, asan, isSwitch = False, isOrbis = False):
 		sanitizer_flags = "<AdditionalOptions>-fsanitize=address %(AdditionalOptions)</AdditionalOptions>\n"
 
 	for vcxproj in vcxprojects:
-		if "Libraries" in vcxproj: 
+		if "Libraries" in vcxproj:
 			continue
 
 		proj = vcxproj.split("\\")
@@ -2271,7 +2271,7 @@ def RemoveSanitizers(arguments):
 
 	if vcxprojects:
 		for vcxproj in vcxprojects:
-			if "Libraries" in vcxproj: 
+			if "Libraries" in vcxproj:
 				continue
 
 			proj = vcxproj.split("\\")
@@ -2298,10 +2298,10 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 
 	configurations = ["Debug", "Release"]
 	platform = "Prospero"
-	
+
 	if skipDebug:
 		configurations.remove("Debug")
-		
+
 	if skipRelease:
 		configurations.remove("Release")
 
@@ -2312,7 +2312,7 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 		sys.exit(-1)
 
 	projects = GetFilesPathByExtension("./Jenkins/","buildproj",False)
-	
+
 	#if MSBuild tasks were not found then parse all projects
 	if len(projects) == 0:
 		projects = GetFilesPathByExtension("./Prospero/Examples_3/","sln",False)
@@ -2320,7 +2320,7 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 	fileList = []
 	msbuildVerbosity = "/verbosity:minimal"
 	msbuildVerbosityClp = "/clp:ErrorsOnly;WarningsOnly;Summary"
-	
+
 	if printMSBuild:
 		msbuildVerbosity = "/verbosity:normal"
 		msbuildVerbosityClp = "/clp:Summary;PerformanceSummary"
@@ -2330,7 +2330,7 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 			if "Sanitizer_Pass_Prospero" in proj:
 				fileList.append(proj)
 				break
-		
+
 		vcxprojects = GetFilesPathByExtension("./Prospero/Examples_3/","vcxproj",False)
 		AddSanitizers(vcxprojects, ubsan, asan)
 		solutions = GetFilesPathByExtension("./Prospero/Examples_3/Unit_Tests","sln",False)
@@ -2339,7 +2339,7 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 		for proj in projects:
 			if "Prospero" in proj and not "Sanitizer_Pass" in proj:
 				fileList.append(proj)
-				
+
 	for proj in fileList:
 		#get current path for sln file
 		#strip the . from ./ in the path
@@ -2357,13 +2357,13 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 
 		#strip extension
 		filename = proj.split(os.sep)[-1]
-		
+
 		if filename == "VisibilityBuffer.sln":
 			if "DebugDx11" in configurations : configurations.remove("DebugDx11")
 			if "ReleaseDx11" in configurations : configurations.remove("ReleaseDx11")
 		elif filename == "HLSLParser.sln":
 			configurations = ["Debug", "Release"]
-			
+
 		#for conf in configurations:
 		if ".sln" in filename:
 			for conf in configurations:
@@ -2372,10 +2372,10 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 		else:
 			command = [msBuildPath ,filename,"/p:Platform=" + platform,"/m", "/nr:false",msbuildVerbosityClp,msbuildVerbosity,"/t:Build"]
 			retCode = ExecuteBuild(command, filename,"All Configurations", platform)
-		
+
 		if retCode != 0:
 			errorOccured = True
-				
+
 		os.chdir(currDir)
 
 	if errorOccured == True:
@@ -2386,13 +2386,13 @@ def BuildProsperoProjects(skipDebug, skipRelease, printMSBuild, ubsan, asan):
 #searchs for %d memory leaks found:
 #if it finds that string it will print the contents of the leaks file
 #then returns True
-#otherwise if no leaks found or the file doesn't exist return false 
+#otherwise if no leaks found or the file doesn't exist return false
 def FindMemoryLeaks(memLeakLog):
 	if not os.path.exists(memLeakLog):
 		print("Could not find the memory leak log file.")
 		print(memLeakLog)
 		return False
-	
+
 	lines = []
 	with open(memLeakLog,'rt') as f:
 		lines = f.readlines()
@@ -2411,7 +2411,7 @@ def FindMemoryLeaks(memLeakLog):
 		#if failed to get correct section then print whole file
 			print (lineContents)
 		return True
-	
+
 	print("No Leaks detected.")
 	return False
 
@@ -2451,7 +2451,7 @@ def CheckDiffContents(relevantChangeStr, targetBranch="origin/master"):
 			continue
 
 	return retValue
-	
+
 def CleanupHandler(signum, frame):
 	global setDefines
 	global setMemTracker
@@ -2471,7 +2471,7 @@ def CleanupHandler(signum, frame):
 	if sanitizers_cleanup:
 		RemoveSanitizers(arguments)
 		RemoveSanitizerSolution(arguments)
-	
+
 	exit(1)
 
 def SanitizersSupported(arguments, darwin):
@@ -2499,8 +2499,8 @@ def SanitizersSupported(arguments, darwin):
 		if arguments.tsan:
 			print("Error: tsan not supported on Switch.")
 			return False
-	
-	return True	
+
+	return True
 
 #create global variable for interrupt handler
 setDefines = False
@@ -2562,7 +2562,7 @@ def MainLogic():
 
 	if sanitizer_pass and not SanitizersSupported(arguments, systemOS == "Darwin"):
 		sys.exit(-1) # fail Jenkins if sanitizers not supported
-	
+
 	if arguments.buildshaders:
 		_filedir = os.path.dirname(os.path.abspath(__file__))
 		process = subprocess.Popen('python -u ' + os.path.join(_filedir, 'PyBuildShaders.py'))
@@ -2575,12 +2575,12 @@ def MainLogic():
 		os.chdir(sys.path[0])
 		exit(CheckDiffContents(arguments.checkdiffcontents))
 
-	
+
 	#if we want to run based on active gpu config
 	#we need defines macros
 	if arguments.gpuselection:
 		arguments.defines = True
-		
+
 	#add cleanup handler in case app gets interrupted
 	#keyboard interrupt
 	#removing defines
@@ -2589,17 +2589,17 @@ def MainLogic():
 	#change path to scripts location
 	if not arguments.preserveworkingdir:
 		os.chdir(sys.path[0])
-	
+
 	returnCode = 0
-		
-	
+
+
 	if (arguments.xbox is not True and arguments.xboxonly is not True) or "GXDKLatest" not in os.environ:
 		arguments.xbox = False
 		arguments.xboxonly = False
-	
+
 	#if we doing xbox only make sure the --xbox argument is enabled.
 	if arguments.xboxonly:
-		arguments.xbox = True 
+		arguments.xbox = True
 
 	setDefines = arguments.defines
 	SaveConfigFileArgs(arguments)
@@ -2621,7 +2621,7 @@ def MainLogic():
 				ExecuteCommand(["PRE_BUILD.bat"], sys.stdout)
 			else:
 				ExecuteCommand(["sh","PRE_BUILD.command"], sys.stdout)
-	
+
 	if arguments.testing:
 		platformName = "MacOS"
 		maxIdleTime = max(arguments.timeout,1)
@@ -2653,11 +2653,11 @@ def MainLogic():
 		elif systemOS.lower() == "linux" or systemOS.lower() == "linux2":
 			platformName = "Ubuntu"
 			returnCode = TestLinuxProjects(arguments.benchmark)
-		
+
 		if arguments.benchmark > 0:
 			filename = f"{platformName}Benchmarks.results"
 			if os.path.exists(filename):
-				os.remove(filename)			
+				os.remove(filename)
 			with open(filename, 'w',  encoding='utf-8') as outfile:
 				json.dump(benchmarkFiles, outfile, indent=4)
 	else:
@@ -2685,8 +2685,8 @@ def MainLogic():
 			returnCode = BuildLinuxProjects()
 
 	PrintResults()
-	
-	#Clean up 
+
+	#Clean up
 	if arguments.defines:
 		print("Removing defines that got added for automated testing")
 		RemoveTestingPreProcessor()
@@ -2694,7 +2694,7 @@ def MainLogic():
 	if sanitizers_cleanup:
 		RemoveSanitizers(arguments)
 		RemoveSanitizerSolution(arguments)
-	
+
 	#return for jenkins
 	sys.exit(returnCode)
 
