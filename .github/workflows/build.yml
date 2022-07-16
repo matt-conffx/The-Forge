@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Build TF
 
 on:
   push:
@@ -18,7 +18,11 @@ jobs:
       with:
         path: Custom-Middleware
         
-    - name: Fetch Art
+    - name: Run PRE_BUILD
       working-directory: The-Forge
       shell: cmd
       run: PRE_BUILD.bat
+      
+    - name: Build Windows
+      working-directory: The-Forge
+      run: python -u ./CI/PyBuild.py
