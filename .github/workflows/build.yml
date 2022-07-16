@@ -22,7 +22,17 @@ jobs:
 #      working-directory: The-Forge
 #      shell: cmd
 #      run: PRE_BUILD.bat
-      
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+        
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '[15.0,16.0)'
+
     - name: Build Windows
       working-directory: The-Forge
       shell: cmd
