@@ -1,0 +1,24 @@
+name: C/C++ CI
+
+on:
+  push:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout The-Forge
+      uses: actions/checkout@v3
+      with:
+        path: The-Forge
+      
+    - name: Checkout Custom-Middleware
+      uses: actions/checkout@v3
+      with:
+        path: Custom-Middleware
+        
+    - name: Fetch Art
+      working-directory: The-Forge
+      shell: cmd
+      run: PRE_BUILD.bat
