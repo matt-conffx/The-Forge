@@ -20,14 +20,6 @@ jobs:
         repository: ConfettiFX/Custom-Middleware
         # ref: ${{ github.ref_name }}  # Checkout the Custom-Middleware branch with the same name as the The-Forge branch we're building
 
-    - name: "[DEBUG] Tree"
-      run: tree /A > workspace.tree
-    - name: "[DEBUG] Upload Tree"
-      uses: actions/upload-artifact@v3
-      with:
-        name: workspace.tree
-        path: workspace.tree
-
     - name: Setup Python
       uses: actions/setup-python@v4
       with:

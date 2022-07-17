@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  windows:
+  quest:
     runs-on: windows-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
       run: choco install vulkan-sdk --version 1.2.162.0 -y
 
     - name: Install VS2017
-      run: choco install VisualStudio2017Community visualstudio2017-workload-nativemobile
+      run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop visualstudio2017-workload-nativemobile
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
