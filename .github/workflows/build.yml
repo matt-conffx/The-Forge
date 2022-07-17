@@ -17,11 +17,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: Custom-Middleware
-        
-#    - name: Run PRE_BUILD
-#      working-directory: The-Forge
-#      shell: cmd
-#      run: PRE_BUILD.bat
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -29,7 +24,7 @@ jobs:
         python-version: '3.x'
         
     - name: Install VS2017
-      run: choco install visualstudio2017buildtools
+      run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop
         
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
