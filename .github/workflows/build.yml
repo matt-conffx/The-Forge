@@ -34,4 +34,4 @@ jobs:
     - name: Build Windows
       working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py
+      run: python -u ./CI/PyBuild.py --printbuildoutput
