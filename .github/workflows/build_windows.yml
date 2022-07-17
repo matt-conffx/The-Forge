@@ -19,7 +19,7 @@ jobs:
         path: Custom-Middleware
 
     - name: "[DEBUG] Tree"
-      run: tree > workspace.tree
+      run: tree /A > workspace.tree
     - name: "[DEBUG] Upload Tree"
       uses: actions/upload-artifact@v3
       with:
