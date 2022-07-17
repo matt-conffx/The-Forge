@@ -37,49 +37,12 @@ jobs:
     - name: Install VS2017
       run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop visualstudio2017-workload-nativemobile
 
-    - name: Download WiX binaries
-      shell: pwsh
-      run: |
-        Write-Host -ForegroundColor Green "Downloading WiX binaries..."
-        Invoke-WebRequest https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip -OutFile wix.zip
-
-        Write-Host -ForegroundColor Green "Extracting WiX..."
-        Expand-Archive wix.zip -DestinationPath wix
-
     - name: Install Android Game Development Extension
       shell: pwsh
       run: |
-        if (-not(Test-Path agde_setup.exe)) {
-          Write-Host -ForegroundColor Green "Downloading AGDE installer..."
-          Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
-        }
+        Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
 
-        if (Test-Path extracted) {
-          Write-Host -ForegroundColor Green "Cleaning up old extracted AGDE installer..."
-          Remove-Item extracted -Recurse
-        }
-
-        Write-Host -ForegroundColor Green "Extracting AGDE installer..."
-        & "wix\dark.exe" agde_setup.exe -x extracted
-
-        Write-Host -ForegroundColor Green "Parsing WiX manifest..."
-        $manifestXml = ([xml](Get-Content extracted/UX/manifest.xml))
-
-        Write-Host -ForegroundColor Green "Renaming payload attached containers..."
-        foreach ($payloadXmlItem in $manifestXml.BurnManifest.Payload) {
-          if (($payloadXmlItem.Id -ne "VSIXBootstrapper2017.exe") -and
-            ($payloadXmlItem.Id -ne "FileGoogle.VisualStudio2017.Android.vsix"))
-          {
-            Write-Host "`tSkipping payload item $($payloadXmlItem.Id)"
-            continue;
-          }
-
-          Write-Host -ForegroundColor DarkGreen "`tRenaming $($payloadXmlItem.SourcePath) -> $($payloadXmlItem.Id)"
-          Rename-Item -Path "extracted/AttachedContainer/$($payloadXmlItem.SourcePath)" -NewName $payloadXmlItem.Id
-        }
-
-        Write-Host -ForegroundColor Green "Installing AGDE vsix..."
-        & "extracted/AttachedContainer/VSIXBootstrapper2017.exe" /force /admin /quiet /shutdownprocesses /install "extracted/AttachedContainer/FileGoogle.VisualStudio2017.Android.vsix"
+        agde_setup.exe -quiet
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
