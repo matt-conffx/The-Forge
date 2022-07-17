@@ -42,7 +42,7 @@ jobs:
       run: |
         Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
 
-        agde_setup.exe -quiet
+        ./agde_setup.exe -quiet
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
