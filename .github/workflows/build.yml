@@ -34,7 +34,7 @@ jobs:
     - name: Build
       working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --printbuildoutput
       
   macOS:
     runs-on: macos-latest
@@ -57,7 +57,7 @@ jobs:
 
     - name: Build
       working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --printbuildoutput
 
       
   ubuntu:
@@ -81,5 +81,5 @@ jobs:
 
     - name: Build
       working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --printbuildoutput
       
