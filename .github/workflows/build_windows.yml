@@ -28,25 +28,25 @@ jobs:
         name: workspace.tree
         path: workspace.tree
 
-    # - name: Setup Python
-    #   uses: actions/setup-python@v4
-    #   with:
-    #     python-version: '3.x'
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-    # - name: Install Vulkan SDK
-    #   run: choco install vulkan-sdk --version 1.2.162.0 -y
+    - name: Install Vulkan SDK
+      run: choco install vulkan-sdk --version 1.2.162.0 -y
 
-    # - name: Install VS2017
-    #   run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop
+    - name: Install VS2017
+      run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop
 
-    # - name: Setup MSBuild
-    #   uses: microsoft/setup-msbuild@v1.1
-    #   with:
-    #     vs-version: '[15.0,16.0)'
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '[15.0,16.0)'
 
-    # - name: Build
-    #   working-directory: The-Forge
-    #   shell: cmd
-    #   run: python -u ./CI/PyBuild.py --preserveworkingdir
-    #   env:
-    #     VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
+    - name: Build
+      working-directory: The-Forge
+      shell: cmd
+      run: python -u ./CI/PyBuild.py --preserveworkingdir
+      env:
+        VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
