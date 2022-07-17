@@ -17,6 +17,9 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: Custom-Middleware
+        
+    - name: "[DEBUG] Tree"
+      run: tree
 
     - name: Setup Python
       uses: actions/setup-python@v4
