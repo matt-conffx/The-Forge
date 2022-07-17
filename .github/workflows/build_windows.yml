@@ -1,4 +1,4 @@
-name: Build TF
+name: "[Windows] Build TF Examples"
 
 on:
   push:
@@ -12,12 +12,12 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: The-Forge
-      
+
     - name: Checkout Custom-Middleware
       uses: actions/checkout@v3
       with:
         path: Custom-Middleware
-        
+
     - name: "[DEBUG] Tree"
       run: tree > workspace.tree
     - name: "[DEBUG] Upload Tree"
@@ -30,13 +30,13 @@ jobs:
     #   uses: actions/setup-python@v4
     #   with:
     #     python-version: '3.x'
-        
+
     # - name: Install Vulkan SDK
     #   run: choco install vulkan-sdk --version 1.2.162.0 -y
-        
+
     # - name: Install VS2017
     #   run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop
-        
+
     # - name: Setup MSBuild
     #   uses: microsoft/setup-msbuild@v1.1
     #   with:
@@ -48,54 +48,3 @@ jobs:
     #   run: python -u ./CI/PyBuild.py --preserveworkingdir
     #   env:
     #     VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
-      
-  macOS:
-    runs-on: macos-latest
-
-    steps:
-    - name: Checkout The-Forge
-      uses: actions/checkout@v3
-      with:
-        path: The-Forge
-      
-    - name: Checkout Custom-Middleware
-      uses: actions/checkout@v3
-      with:
-        path: Custom-Middleware
-
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-
-    - name: Build
-      working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --preserveworkingdir
-
-      
-  ubuntu:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout The-Forge
-      uses: actions/checkout@v3
-      with:
-        path: The-Forge
-      
-    - name: Checkout Custom-Middleware
-      uses: actions/checkout@v3
-      with:
-        path: Custom-Middleware
-
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-        
-    - name: Install Codelite
-      run: sudo apt install codelite
-
-    - name: Build
-      working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --preserveworkingdir
-      
