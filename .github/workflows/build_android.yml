@@ -37,12 +37,20 @@ jobs:
     - name: Install VS2017
       run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop visualstudio2017-workload-nativemobile
 
+    - name: Download WiX binaries
+      shell: pwsh
+      run: |
+        Write-Host -ForegroundColor Green "Downloading WiX binaries..."
+        Invoke-WebRequest https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip -OutFile wix.zip
+
+        Write-Host -ForegroundColor Green "Extracting WiX..."
+        Expand-Archive wix.zip -DestinationPath wix
+
     - name: Install Android Game Development Extension
       shell: pwsh
       run: |
         if (-not(Test-Path agde_setup.exe)) {
           Write-Host -ForegroundColor Green "Downloading AGDE installer..."
-          # Download installer
           Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
         }
 
@@ -52,7 +60,7 @@ jobs:
         }
 
         Write-Host -ForegroundColor Green "Extracting AGDE installer..."
-        & "C:\Program Files (x86)\WiX Toolset v3.11\bin\dark.exe" agde_setup.exe -x extracted
+        & "wix\dark.exe" agde_setup.exe -x extracted
 
         Write-Host -ForegroundColor Green "Parsing WiX manifest..."
         $manifestXml = ([xml](Get-Content extracted/UX/manifest.xml))
