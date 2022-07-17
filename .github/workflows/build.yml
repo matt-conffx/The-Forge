@@ -37,7 +37,7 @@ jobs:
     - name: Build
       working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
       
@@ -62,7 +62,7 @@ jobs:
 
     - name: Build
       working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir
 
       
   ubuntu:
@@ -89,5 +89,5 @@ jobs:
 
     - name: Build
       working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir
       
