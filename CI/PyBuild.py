@@ -896,10 +896,13 @@ def BuildLinuxProjects():
 	errorOccured = False
 
 	#check if codelite build_settings.xml already exists
-	buildSettingsFile = '~/.codelite/config/build_settings.xml'
-	if not os.path.exists(buildSettingsFile):
+	codeliteConfigPath = os.path.realpath(str(Path.home()) + '/.codelite/config')
+	codeliteBuildSettingsFile = os.path.realpath(codeliteConfigPath + '/build_settings.xml')
+	if not os.path.exists(codeliteBuildSettingsFile):
 		#use default build settings (codelite GUI has not yet been run)
-		buildSettingsFile = os.path.dirname(os.path.realpath(sys.argv[0])) + '/codelite_build_settings.xml.default'
+		os.makedirs(codeliteConfigPath)
+		defaultBuildSettingsFile = os.path.dirname(os.path.realpath(sys.argv[0])) + '/codelite_build_settings.xml.default'
+		shutil.copyfile(defaultBuildSettingsFile, codeliteBuildSettingsFile)
 
 	projsToBuild = GetFilesPathByExtension("./Examples_3/","workspace", False)
 	for projectPath in projsToBuild:
@@ -926,7 +929,7 @@ def BuildLinuxProjects():
 						ubuntuProjects.append(child.attrib["Name"])
 
 			for proj in ubuntuProjects:
-				command = ["codelite-make","-w",filename,"-p", proj,"-c",conf,"--settings",buildSettingsFile]
+				command = ["codelite-make","-w",filename,"-p", proj,"-c",conf]
 				#sucess = ExecuteBuild(command, filename+"/"+proj,conf, "Ubuntu")
 				sucess = ExecuteCommand(command, sys.stdout)[0]
 
