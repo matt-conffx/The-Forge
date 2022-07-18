@@ -51,8 +51,10 @@ jobs:
       run: |
         Write-Host "Downloading AGDE..."
         Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
-        Write-Host "Installing AGDE..."
+        Write-Host "Starting AGDE installer..."
         ./agde_setup.exe -quiet
+        Write-Host "Waiting for AGDE installer to close..."
+        Wait-Process agde_setup
 
         Write-Host "Dumping TEMP log files ($env:TEMP) :"
         $logFiles = Get-ChildItem -Path $env:TEMP -Filter "*.log"
@@ -63,13 +65,6 @@ jobs:
             $fileContents = Get-Content $logFile.FullName -Raw
             Write-Host $fileContents
         }
-
-
-        Write-Host Dumping tree of C
-        tree C:\ /A /F
-        Write-Host Dumping tree of D
-        tree C:\ /A /F
-
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
