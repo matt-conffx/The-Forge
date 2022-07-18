@@ -895,6 +895,12 @@ def BuildXcodeProjects(skipMacos, skipIos, skipIosCodeSigning, skipDebugBuild, s
 def BuildLinuxProjects():
 	errorOccured = False
 
+	#check if codelite build_settings.xml already exists
+	buildSettingsFile = '~/.codelite/config/build_settings.xml'
+	if not os.path.exists(buildSettingsFile):
+		#use default build settings (codelite GUI has not yet been run)
+		buildSettingsFile = os.path.dirname(os.path.realpath(sys.argv[0])) + '/codelite_build_settings.xml.default'
+
 	projsToBuild = GetFilesPathByExtension("./Examples_3/","workspace", False)
 	for projectPath in projsToBuild:
 		#get working directory (excluding the workspace in path)
@@ -920,7 +926,7 @@ def BuildLinuxProjects():
 						ubuntuProjects.append(child.attrib["Name"])
 
 			for proj in ubuntuProjects:
-				command = ["codelite-make","-w",filename,"-p", proj,"-c",conf]
+				command = ["codelite-make","-w",filename,"-p", proj,"-c",conf,"--settings",buildSettingsFile]
 				#sucess = ExecuteBuild(command, filename+"/"+proj,conf, "Ubuntu")
 				sucess = ExecuteCommand(command, sys.stdout)[0]
 
