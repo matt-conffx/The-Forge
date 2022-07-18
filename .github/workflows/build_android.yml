@@ -8,6 +8,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: "[DEBUG] Temp dir test"
+      env:
+        TEMP: ${{ runner.temp }}
+      shell: pwsh
+      run: |
+        Write-Host "Temp dir: $env:TEMP"
+
     - name: Checkout The-Forge
       uses: actions/checkout@v3
       with:
@@ -40,7 +47,7 @@ jobs:
     - name: Install Android Game Development Extension
       shell: pwsh
       env:
-        TEMP: ${{ env.RUNNER_TEMP }}
+        TEMP: ${{ runner.temp }}
       run: |
         Write-Host "Downloading AGDE..."
         Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
