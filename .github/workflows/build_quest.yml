@@ -5,7 +5,12 @@ on:
 
 jobs:
   quest:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2019, windows-2022]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout The-Forge

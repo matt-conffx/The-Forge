@@ -5,15 +5,12 @@ on:
 
 jobs:
   android:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2019, windows-2022]
 
-    steps:
-    - name: "[DEBUG] Temp dir test"
-      env:
-        TEMP: ${{ runner.temp }}
-      shell: pwsh
-      run: |
-        Write-Host "Temp dir: $env:TEMP"
+    runs-on: ${{ matrix.os }}
 
     - name: Checkout The-Forge
       uses: actions/checkout@v3
