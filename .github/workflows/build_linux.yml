@@ -26,7 +26,7 @@ jobs:
         python-version: '3.x'
 
     - name: Install tools and dependencies
-      run: sudo apt install codelite make pkg-config libx11-dev
+      run: sudo apt install codelite make pkg-config libx11-dev libvulkan-dev
 
     - name: Build
       working-directory: The-Forge
