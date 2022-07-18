@@ -40,9 +40,21 @@ jobs:
     - name: Install Android Game Development Extension
       shell: pwsh
       run: |
+        Write-Host "Downloading AGDE..."
         Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
-
+        Write-Host "Installing AGDE..."
         ./agde_setup.exe -quiet
+
+        Write-Host "Dumping AGDE install logs..."
+        $logFiles = Get-ChildItem -Path $env:TEMP -Filter "Android_Game_Development_Extension_*.log"
+        foreach ($logFile in $logFiles) {
+            Write-Host "`n`n`n`n=================== Dumping log file ${logFile} ===================`n`n`n`n"
+
+            $fileContents = Get-Content $logFile.FullName -Raw
+            Write-Host $fileContents
+        }
+
+
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
