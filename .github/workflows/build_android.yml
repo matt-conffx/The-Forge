@@ -65,6 +65,11 @@ jobs:
         }
 
 
+        Write-Host Dumping tree of C
+        tree C:\ /A /F
+        Write-Host Dumping tree of D
+        tree C:\ /A /F
+
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
