@@ -74,6 +74,6 @@ jobs:
     - name: Build
       working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --android
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --android --printbuildoutput
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
