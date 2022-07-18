@@ -45,8 +45,9 @@ jobs:
         Write-Host "Installing AGDE..."
         ./agde_setup.exe -quiet
 
-        Write-Host "Dumping AGDE install logs..."
-        $logFiles = Get-ChildItem -Path $env:TEMP -Filter "Android_Game_Development_Extension_*.log"
+        Write-Host "Dumping TEMP log files:"
+        $logFiles = Get-ChildItem -Path $env:TEMP -Filter "*.log"
+        $logFiles
         foreach ($logFile in $logFiles) {
             Write-Host "`n`n`n`n=================== Dumping log file ${logFile} ===================`n`n`n`n"
 
