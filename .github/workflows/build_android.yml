@@ -49,7 +49,7 @@ jobs:
     - name: "[DEBUG] Add verbosity to Android.mk for shaderc"
       shell: pwsh
       run: |
-        Copy-Item ".github/workflows/modified_Android.mk" "$env:ANDROID_SDK_ROOT/ndk/21.4.7075529/sources/third_party/shaderc/Android.mk"
+        Copy-Item "The-Forge/.github/workflows/modified_Android.mk" "$env:ANDROID_SDK_ROOT/ndk/21.4.7075529/sources/third_party/shaderc/Android.mk"
 
     - name: Setup Python
       uses: actions/setup-python@v4
