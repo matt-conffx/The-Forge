@@ -44,6 +44,6 @@ jobs:
     - name: Build
       working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild
+      run: python -u ./CI/PyBuild.py --preserveworkingdir
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
