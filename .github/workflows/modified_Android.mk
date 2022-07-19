@@ -38,6 +38,8 @@ $(1)/combine.ar: $(addprefix $(1)/, $(ALL_LIBS))
 
 $(1)/libshaderc_combined.a: $(addprefix $(1)/, $(ALL_LIBS)) $(1)/combine.ar
 	@echo "[$(TARGET_ARCH_ABI)] Combine: libshaderc_combined.a <= $(ALL_LIBS)"
+	dir "$(1)"
+	dir "$(ROOT_SHADERC_PATH)"
 	cd $(1) && $(2)ar -M < combine.ar && cd $(ROOT_SHADERC_PATH)
 	$(2)objcopy --strip-debug $(1)/libshaderc_combined.a
 
