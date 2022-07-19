@@ -32,13 +32,17 @@ jobs:
     - name: Install Android SDK
       shell: pwsh
       run: |
-        Remove-Item -Path "$env:ANDROID_SDK_ROOT" -Recurse
+        Write-Host "Removing any old Android SDKs..."
+        Remove-Item -Path "$env:ANDROID_SDK_ROOT" -Recurse -ErrorAction Ignore
+        Write-Host "Downloading commandline-tools..."
         Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip -OutFile commandline_tools.zip
+        Write-Host "Extracting commandline-tools..."
         Expand-Archive commandline_tools.zip -DestinationPath commandline_tools_extracted
         New-Item "$env:ANDROID_SDK_ROOT/cmdline-tools" -ItemType Directory
         Move-Item -Path commandline_tools_extracted/cmdline-tools -Destination "$env:ANDROID_SDK_ROOT/cmdline-tools"
         Rename-Item "$env:ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" -NewName latest
 
+        Write-Host "Installing Android NDK..."
         Set-Location "$env:ANDROID_SDK_ROOT/cmdline-tools/latest/bin/"
         Write-Output Y | .\sdkmanager.bat "ndk;21.4.7075529"
 
