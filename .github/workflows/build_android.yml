@@ -23,6 +23,15 @@ jobs:
       with:
         path: The-Forge
 
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
+
     - name: PRE_BUILD.bat
       shell: cmd
       working-directory: The-Forge
@@ -34,6 +43,15 @@ jobs:
         path: Custom-Middleware
         repository: ConfettiFX/Custom-Middleware
         # ref: ${{ github.ref_name }}  # Checkout the Custom-Middleware branch with the same name as the The-Forge branch we're building
+
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
 
     - name: Install Android SDK
       shell: pwsh
@@ -60,20 +78,26 @@ jobs:
     - name: Install Vulkan SDK
       run: choco install vulkan-sdk --version 1.2.162.0
 
-    - name: "[DEBUG] Print free space"
-      shell: cmd
-      run: |
-        dir C:\
-        dir D:\
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
 
     - name: Install VS2017
       run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop visualstudio2017-workload-nativemobile
 
-    - name: "[DEBUG] Print free space"
-      shell: cmd
-      run: |
-        dir C:\
-        dir D:\
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
 
     - name: Install Android Game Development Extension
       shell: pwsh
@@ -85,22 +109,28 @@ jobs:
         Write-Host "Waiting for AGDE installer to close..."
         Wait-Process agde_setup
 
-    - name: "[DEBUG] Print free space"
-      shell: cmd
-      run: |
-        dir C:\
-        dir D:\
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
       with:
         vs-version: '[15.0,16.0)'
 
-    - name: "[DEBUG] Print free space"
-      shell: cmd
-      run: |
-        dir C:\
-        dir D:\
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
 
     - name: Build
       working-directory: The-Forge
@@ -109,8 +139,11 @@ jobs:
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
 
-    - name: "[DEBUG] Print free space"
-      shell: cmd
-      run: |
-        dir C:\
-        dir D:\
+    - name: "[DEBUG] Print free space C:"
+      shell: bash
+      working-directory: C:\
+      run: du -h -d 1
+    - name: "[DEBUG] Print free space D:"
+      shell: bash
+      working-directory: D:\
+      run: du -h -d 1
