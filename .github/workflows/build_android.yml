@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Setup workspace link
       shell: pwsh
-      run: New-Item -Path $env:GITHUB_WORKSPACE -ItemType SymbolicLink -Value $env:TF_WORKSPACE
+      run: New-Item -Path $env:GITHUB_WORKSPACE -ItemType SymbolicLink -Value $env:TF_WORKSPACE -Force
 
     - name: Checkout The-Forge
       uses: actions/checkout@v3
