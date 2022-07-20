@@ -46,14 +46,14 @@ jobs:
         Set-Location "$env:ANDROID_SDK_ROOT/cmdline-tools/latest/bin/"
         Write-Output Y | .\sdkmanager.bat "ndk;21.4.7075529"
     
-    - name: "[DEBUG] Add verbosity to Android.mk for shaderc"
-      shell: pwsh
-      run: Copy-Item "The-Forge/.github/workflows/modified_Android.mk" "$env:ANDROID_SDK_ROOT/ndk/21.4.7075529/sources/third_party/shaderc/Android.mk"
+    # - name: "[DEBUG] Add verbosity to Android.mk for shaderc"
+    #   shell: pwsh
+    #   run: Copy-Item "The-Forge/.github/workflows/modified_Android.mk" "$env:ANDROID_SDK_ROOT/ndk/21.4.7075529/sources/third_party/shaderc/Android.mk"
     
     - name: "[DEBUG] Early build of shaderc"
       shell: cmd
-      working-directory: The-Forge/Scripts/vulkan
-      run: android_shaderc.bat C:\Android\android-sdk\ndk\21.4.7075529\
+      working-directory: C:\\
+      run: "${{ github.workspace }}\\The-Forge\\Scripts\\vulkan\\android_shaderc.bat" C:\\Android\\android-sdk\\ndk\\21.4.7075529\\
 
     - name: Setup Python
       uses: actions/setup-python@v4
