@@ -45,7 +45,9 @@ $(1)/libshaderc_combined.a: $(addprefix $(1)/, $(ALL_LIBS)) $(1)/combine.ar
 	ping -n 2 127.0.0.1
 	dir "C:/Android/android-sdk/ndk/21.4.7075529/build//../toolchains/llvm/prebuilt/windows-x86_64/bin"
 	ping -n 2 127.0.0.1
-	cd $(1) && $(2)ar -M < combine.ar && cd $(ROOT_SHADERC_PATH)
+	cd "$(1)"
+	cd "$(1)" && "$(2)ar" -M < combine.ar
+	cd "$(1)" && "$(2)ar" -M < combine.ar && cd $(ROOT_SHADERC_PATH)
 	ping -n 2 127.0.0.1
 	$(2)objcopy --strip-debug $(1)/libshaderc_combined.a
 	ping -n 2 127.0.0.1
