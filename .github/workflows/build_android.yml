@@ -23,7 +23,8 @@ jobs:
       working-directory: C:\
       run: |
         New-Item -Path $env:TF_WORKSPACE -ItemType Directory
-        New-Item -Path $env:GITHUB_WORKSPACE -ItemType Junction -Value $env:TF_WORKSPACE -Force
+        New-Item -Path $env:GITHUB_WORKSPACE\The-Forge -ItemType Junction -Value $env:TF_WORKSPACE\The-Forge -Force
+        New-Item -Path $env:GITHUB_WORKSPACE\Custom-Middleware -ItemType Junction -Value $env:TF_WORKSPACE\Custom-Middleware -Force
 
     - name: Checkout The-Forge
       uses: actions/checkout@v3
