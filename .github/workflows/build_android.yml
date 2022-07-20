@@ -20,6 +20,7 @@ jobs:
     steps:
     - name: Setup workspace link
       shell: pwsh
+      working-directory: C:\
       run: New-Item -Path $env:GITHUB_WORKSPACE -ItemType SymbolicLink -Value $env:TF_WORKSPACE -Force
 
     - name: Checkout The-Forge
