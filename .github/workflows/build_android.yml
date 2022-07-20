@@ -45,11 +45,6 @@ jobs:
         Write-Host "Installing Android NDK..."
         Set-Location "$env:ANDROID_SDK_ROOT/cmdline-tools/latest/bin/"
         Write-Output Y | .\sdkmanager.bat "ndk;21.4.7075529"
-    
-    - name: "[DEBUG] Early build of shaderc"
-      shell: cmd
-      working-directory: The-Forge/Scripts/vulkan
-      run: android_shaderc.bat C:\\Android\\android-sdk\\ndk\\21.4.7075529\\
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -58,6 +53,14 @@ jobs:
 
     - name: Install Vulkan SDK
       run: choco install vulkan-sdk --version 1.2.162.0
+
+    - name: "[DEBUG] Print free space"
+      shell: cmd
+      run: |
+        dir C:\
+        dir D:\
+        fsutil volume diskfree c:
+        fsutil volume diskfree d:
 
     - name: Install VS2017
       run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop visualstudio2017-workload-nativemobile
