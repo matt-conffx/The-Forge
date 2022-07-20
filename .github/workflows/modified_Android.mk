@@ -40,6 +40,8 @@ $(1)/libshaderc_combined.a: $(addprefix $(1)/, $(ALL_LIBS)) $(1)/combine.ar
 	@echo "[$(TARGET_ARCH_ABI)] Combine: libshaderc_combined.a <= $(ALL_LIBS)"
 	dir "$(1)"
 	dir "$(ROOT_SHADERC_PATH)"
+	dir "C:/Android/android-sdk/ndk/21.4.7075529/build//../toolchains/llvm/prebuilt/windows-x86_64/bin"
+	type "$(1)/combine.ar"
 	cd $(1) && $(2)ar -M < combine.ar && cd $(ROOT_SHADERC_PATH)
 	$(2)objcopy --strip-debug $(1)/libshaderc_combined.a
 
