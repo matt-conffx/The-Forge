@@ -52,8 +52,8 @@ jobs:
     
     - name: "[DEBUG] Early build of shaderc"
       shell: cmd
-      working-directory: C:\\
-      run: "${{ github.workspace }}\\The-Forge\\Scripts\\vulkan\\android_shaderc.bat" C:\\Android\\android-sdk\\ndk\\21.4.7075529\\
+      working-directory: The-Forge/Scripts/vulkan
+      run: android_shaderc.bat C:\\Android\\android-sdk\\ndk\\21.4.7075529\\
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -68,8 +68,6 @@ jobs:
 
     - name: Install Android Game Development Extension
       shell: pwsh
-      env:
-        TEMP: ${{ runner.temp }}
       run: |
         Write-Host "Downloading AGDE..."
         Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
