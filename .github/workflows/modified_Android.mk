@@ -29,23 +29,26 @@ endef
 define gen_libshaderc
 
 $(1)/combine.ar: $(addprefix $(1)/, $(ALL_LIBS))
-	@echo "create libshaderc_combined.a" > $(1)/combine.ar
+	echo "create libshaderc_combined.a" > $(1)/combine.ar
 	$(foreach lib,$(ALL_LIBS),
-		@echo "addlib $(lib)" >> $(1)/combine.ar
+		echo "addlib $(lib)" >> $(1)/combine.ar
 	)
-	@echo "save" >> $(1)/combine.ar
-	@echo "end" >> $(1)/combine.ar
+	echo "save" >> $(1)/combine.ar
+	echo "end" >> $(1)/combine.ar
 
 $(1)/libshaderc_combined.a: $(addprefix $(1)/, $(ALL_LIBS)) $(1)/combine.ar
 	@echo "[$(TARGET_ARCH_ABI)] Combine: libshaderc_combined.a <= $(ALL_LIBS)"
-	type "$(1)/combine.ar"
+	ping -n 2 127.0.0.1
 	dir "$(1)"
+	ping -n 2 127.0.0.1
 	dir "$(ROOT_SHADERC_PATH)"
+	ping -n 2 127.0.0.1
 	dir "C:/Android/android-sdk/ndk/21.4.7075529/build//../toolchains/llvm/prebuilt/windows-x86_64/bin"
+	ping -n 2 127.0.0.1
 	cd $(1) && $(2)ar -M < combine.ar && cd $(ROOT_SHADERC_PATH)
-	timeout 5
+	ping -n 2 127.0.0.1
 	$(2)objcopy --strip-debug $(1)/libshaderc_combined.a
-	timeout 5
+	ping -n 2 127.0.0.1
 
 $(NDK_APP_LIBS_OUT)/$(APP_STL)/$(TARGET_ARCH_ABI)/libshaderc.a: \
 		$(1)/libshaderc_combined.a
