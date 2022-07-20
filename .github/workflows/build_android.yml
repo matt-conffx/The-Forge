@@ -22,7 +22,8 @@ jobs:
       shell: pwsh
       working-directory: C:\
       run: |
-        New-Item -Path $env:TF_WORKSPACE -ItemType Directory
+        New-Item -Path $env:TF_WORKSPACE\The-Forge -ItemType Directory
+        New-Item -Path $env:TF_WORKSPACE\Custom-Middleware -ItemType Directory
         New-Item -Path $env:GITHUB_WORKSPACE\The-Forge -ItemType Junction -Value $env:TF_WORKSPACE\The-Forge -Force
         New-Item -Path $env:GITHUB_WORKSPACE\Custom-Middleware -ItemType Junction -Value $env:TF_WORKSPACE\Custom-Middleware -Force
 
