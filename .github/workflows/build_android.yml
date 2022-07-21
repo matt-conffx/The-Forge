@@ -96,6 +96,7 @@ jobs:
         ./agde_setup.exe -quiet
         Write-Host "Waiting for AGDE installer to close..."
         Wait-Process agde_setup
+        Remove-Item agde_setup.exe -ErrorAction Continue
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
