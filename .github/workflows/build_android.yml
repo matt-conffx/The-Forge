@@ -121,5 +121,6 @@ jobs:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
 
     - name: "[DEBUG] Print free space"
+      if: always()
       shell: pwsh
       run: Get-Volume
