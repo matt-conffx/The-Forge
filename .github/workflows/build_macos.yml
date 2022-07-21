@@ -32,4 +32,4 @@ jobs:
 
     - name: Build
       working-directory: The-Forge
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --skipioscodesigning
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --printbuildoutput --skipioscodesigning
