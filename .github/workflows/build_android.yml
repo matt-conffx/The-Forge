@@ -27,8 +27,9 @@ jobs:
 
         # Remove original Android SDK, we install our own
         Remove-Item -Path C:\Android -Recurse -ErrorAction Continue
-        # Remove VS2019, we use VS2017
+        # Remove VS2019 and VS2022, we use VS2017
         Remove-Item -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019" -Recurse -ErrorAction Continue
+        Remove-Item -Path "C:\Program Files\Microsoft Visual Studio\2022" -Recurse -ErrorAction Continue
 
         # C drive has ~90GB free space, GITHUB_WORKSPACE only has ~14GB free space
         New-Item -Path $env:TF_WORKSPACE\The-Forge -ItemType Directory
