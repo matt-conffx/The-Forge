@@ -19,10 +19,18 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+    - name: "[DEBUG] Print free space C:"
+      shell: cmd
+      run: |
+        dir C:\
+        dir D:\
+
     - name: Configure system for maximum build space
       shell: pwsh
       working-directory: C:\
       run: |
+        Set-PSDebug -Trace 1
+        
         # Remove original Android SDK, we install our own
         Remove-Item -Path C:\Android -Recurse -ErrorAction Continue
         # Remove VS2019, we use VS2017
