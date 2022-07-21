@@ -1856,8 +1856,8 @@ def BuildAndroidProjects(skipDebug, skipRelease, printMSBuild, quest):
 	platformName = "Android" if not quest else "Quest"
 	
 	if quest:
-		if os.path.isdir("C:\\ovr_sdk_mobile_1.46.0"):
-			copy_tree("C:\\ovr_sdk_mobile_1.46.0", "Common_3\\ThirdParty\\OpenSource\\ovr_sdk_mobile_1.46.0")
+		if os.path.isdir("C:\\ovr_sdk_mobile_1.50.0"):
+			copy_tree("C:\\ovr_sdk_mobile_1.50.0", "Common_3\\ThirdParty\\OpenSource\\ovr_sdk_mobile")
 		if os.path.isdir("C:\\Vulkan-ValidationLayer-1.2.182.0"):
 			copy_tree("C:\\Vulkan-ValidationLayer-1.2.182.0", "Common_3\\ThirdParty\\OpenSource\\Vulkan-ValidationLayer-1.2.182.0")
 		

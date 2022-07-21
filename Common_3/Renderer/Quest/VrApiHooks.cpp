@@ -1,8 +1,8 @@
 #if defined(QUEST_VR)
 #include "VrApiHooks.h"
-#include "../../ThirdParty/OpenSource/ovr_sdk_mobile_1.46.0/VrApi/Include/VrApi.h"
-#include "../../ThirdParty/OpenSource/ovr_sdk_mobile_1.46.0/VrApi/Include/VrApi_Vulkan.h"
-#include "../../ThirdParty/OpenSource/ovr_sdk_mobile_1.46.0/VrApi/Include/VrApi_Helpers.h"
+#include "../../ThirdParty/OpenSource/ovr_sdk_mobile/VrApi/Include/VrApi.h"
+#include "../../ThirdParty/OpenSource/ovr_sdk_mobile/VrApi/Include/VrApi_Vulkan.h"
+#include "../../ThirdParty/OpenSource/ovr_sdk_mobile/VrApi/Include/VrApi_Helpers.h"
 
 #include "../../ThirdParty/OpenSource/tinyimageformat/tinyimageformat_apis.h"
 #include "../../OS/Interfaces/ILog.h"

@@ -229,14 +229,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Android-arm64-v8a'">
-    <IncludePath>C:\Dev\The-Forge\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile_1.46.0\VrApi\Include;$(VS_NDKRoot)sources\android\native_app_glue</IncludePath>
+    <IncludePath>C:\Dev\The-Forge\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile\VrApi\Include;$(VS_NDKRoot)sources\android\native_app_glue</IncludePath>
     <TargetName>lib$(ProjectName)</TargetName>
     <TargetExt>.a</TargetExt>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Android-arm64-v8a'">
-    <IncludePath>C:\Dev\The-Forge\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile_1.46.0\VrApi\Include;$(VS_NDKRoot)sources\android\native_app_glue</IncludePath>
+    <IncludePath>C:\Dev\The-Forge\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile\VrApi\Include;$(VS_NDKRoot)sources\android\native_app_glue</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\Intermediate\</IntDir>
     <TargetName>lib$(ProjectName)</TargetName>

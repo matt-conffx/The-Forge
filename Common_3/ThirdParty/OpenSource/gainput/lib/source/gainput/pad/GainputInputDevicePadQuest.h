@@ -16,8 +16,8 @@
 #define QUEST_REMOTE_MAX 2
 
 #include "../../../../../../Common_3/OS/Quest/VrApi.h"
-#include "../../../ovr_sdk_mobile_1.46.0/VrApi/Include/VrApi.h"
-#include "../../../ovr_sdk_mobile_1.46.0/VrApi/Include/VrApi_Input.h"
+#include "../../../ovr_sdk_mobile/VrApi/Include/VrApi.h"
+#include "../../../ovr_sdk_mobile/VrApi/Include/VrApi_Input.h"
 
 #include "../../../../../../Common_3/OS/Interfaces/ILog.h"
 

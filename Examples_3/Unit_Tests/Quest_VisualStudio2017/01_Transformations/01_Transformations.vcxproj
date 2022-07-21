@@ -105,7 +105,7 @@ xcopy $(ProjectDir)..\..\UnitTestResources\Textures\circlepad.ktx $(SolutionDir)
 xcopy $(ProjectDir)..\..\UnitTestResources\Fonts\*.* $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\assets\Fonts\ /s /y
 xcopy $(SolutionDir)$(Platform)\$(Configuration)\OS\Shaders\ $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\assets\Shaders\ /s /y /d
 xcopy $(VS_NdkRoot)sources\third_party\vulkan\src\build-android\jniLibs\$(PlatformTarget)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a\ /s /y /d
-xcopy  $(SolutionDir)..\..\..\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile_1.46.0\VrApi\Libs\Android\$(PlatformTarget)\$(Configuration)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a /s /y /d
+xcopy  $(SolutionDir)..\..\..\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile\VrApi\Libs\Android\$(PlatformTarget)\$(Configuration)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a /s /y /d
 xcopy  $(SolutionDir)..\..\..\Common_3\ThirdParty\OpenSource\AndroidVulkanValidationLayers\$(PlatformTarget)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a /s /y /d
 
 
@@ -161,7 +161,7 @@ xcopy $(ProjectDir)..\..\UnitTestResources\Textures\circlepad.ktx $(SolutionDir)
 xcopy $(ProjectDir)..\..\UnitTestResources\Fonts\*.* $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\assets\Fonts\ /s /y
 xcopy $(SolutionDir)$(Platform)\$(Configuration)\OS\Shaders\ $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\assets\Shaders\ /s /y /d
 xcopy $(VS_NdkRoot)sources\third_party\vulkan\src\build-android\jniLibs\$(PlatformTarget)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a\ /s /y /d
-xcopy  $(SolutionDir)..\..\..\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile_1.46.0\VrApi\Libs\Android\$(PlatformTarget)\$(Configuration)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a /s /y /d</Command>
+xcopy  $(SolutionDir)..\..\..\Common_3\ThirdParty\OpenSource\ovr_sdk_mobile\VrApi\Libs\Android\$(PlatformTarget)\$(Configuration)\*.so $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\$(PlatformTarget)\libs\arm64-v8a /s /y /d</Command>
     </PreLinkEvent>
     <PreBuildEvent />
   </ItemDefinitionGroup>
