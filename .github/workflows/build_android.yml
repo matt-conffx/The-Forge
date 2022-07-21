@@ -14,18 +14,33 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2019, windows-2022]
+        skip_build_type: [--skipdebugbuild, --skipreleasebuild]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Setup workspace link
+    - name: Configure system for maximum build space
       shell: pwsh
       working-directory: C:\
       run: |
+        # Remove original Android SDK, we install our own
+        Remove-Item -Path C:\Android -Recurse -ErrorAction Continue
+        # Remove VS2019, we use VS2017
+        Remove-Item -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019" -Recurse -ErrorAction Continue
+
+        # C drive has ~90GB free space, GITHUB_WORKSPACE only has ~14GB free space
         New-Item -Path $env:TF_WORKSPACE\The-Forge -ItemType Directory
-        New-Item -Path $env:TF_WORKSPACE\Custom-Middleware -ItemType Directory
         New-Item -Path $env:GITHUB_WORKSPACE\The-Forge -ItemType Junction -Value $env:TF_WORKSPACE\The-Forge -Force
+        New-Item -Path $env:TF_WORKSPACE\Custom-Middleware -ItemType Directory
         New-Item -Path $env:GITHUB_WORKSPACE\Custom-Middleware -ItemType Junction -Value $env:TF_WORKSPACE\Custom-Middleware -Force
+        New-Item -Path D:\VulkanSDK -ItemType Directory
+        New-Item -Path C:\VulkanSDK -ItemType Junction -Value D:\VulkanSDK
+
+    - name: "[DEBUG] Print free space C:"
+      shell: cmd
+      run: |
+        dir C:\
+        dir D:\
 
     - name: Checkout The-Forge
       uses: actions/checkout@v3
@@ -126,7 +141,7 @@ jobs:
     - name: Build
       working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --android --printbuildoutput
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --printbuildoutput --android ${{ matrix.skip_build_type }}
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
 
