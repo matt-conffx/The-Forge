@@ -22,23 +22,24 @@ jobs:
       shell: pwsh
       working-directory: C:\
       run: |
-        # Print free space before
+        Write-Host "Free space before cleanup:"
         Get-Volume
 
-        # Remove original Android SDK, we install our own
+        Write-Host "Removing Android SDK..."
         Remove-Item -Path C:\Android -Recurse -ErrorAction Continue
-        # Remove VS2019, we use VS2017
+        Write-Host "Removing VS2019 and VS2022..."
         Remove-Item -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019" -Recurse -ErrorAction Continue
+        Remove-Item -Path "C:\Program Files\Microsoft Visual Studio\2022" -Recurse -ErrorAction Continue
 
-        # C drive has ~90GB free space, GITHUB_WORKSPACE only has ~14GB free space
-        New-Item -Path $env:TF_WORKSPACE\The-Forge -ItemType Directory
-        New-Item -Path $env:GITHUB_WORKSPACE\The-Forge -ItemType Junction -Value $env:TF_WORKSPACE\The-Forge -Force
-        New-Item -Path $env:TF_WORKSPACE\Custom-Middleware -ItemType Directory
-        New-Item -Path $env:GITHUB_WORKSPACE\Custom-Middleware -ItemType Junction -Value $env:TF_WORKSPACE\Custom-Middleware -Force
-        New-Item -Path D:\VulkanSDK -ItemType Directory
-        New-Item -Path C:\VulkanSDK -ItemType Junction -Value D:\VulkanSDK
+        Write-Host "Symlinking workspace directories onto larger C: drive..."
+        New-Item -Path $env:TF_WORKSPACE\The-Forge -ItemType Directory | Out-Null
+        New-Item -Path $env:GITHUB_WORKSPACE\The-Forge -ItemType Junction -Value $env:TF_WORKSPACE\The-Forge -Force | Out-Null
+        New-Item -Path $env:TF_WORKSPACE\Custom-Middleware -ItemType Directory | Out-Null
+        New-Item -Path $env:GITHUB_WORKSPACE\Custom-Middleware -ItemType Junction -Value $env:TF_WORKSPACE\Custom-Middleware -Force | Out-Null
+        New-Item -Path D:\VulkanSDK -ItemType Directory | Out-Null
+        New-Item -Path C:\VulkanSDK -ItemType Junction -Value D:\VulkanSDK | Out-Null
 
-        # Print free space after
+        Write-Host "Free space after cleanup:"
         Get-Volume
 
     - name: Checkout The-Forge
@@ -57,7 +58,7 @@ jobs:
       shell: pwsh
       run: |
         Write-Host "Removing any old Android SDKs..."
-        Remove-Item -Path "$env:ANDROID_SDK_ROOT" -Recurse -ErrorAction Ignore
+        Remove-Item -Path "$env:ANDROID_SDK_ROOT" -Recurse -ErrorAction Continue
         Write-Host "Downloading commandline-tools..."
         Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip -OutFile commandline_tools.zip
         Write-Host "Extracting commandline-tools..."
@@ -65,6 +66,7 @@ jobs:
         New-Item "$env:ANDROID_SDK_ROOT/cmdline-tools" -ItemType Directory
         Move-Item -Path commandline_tools_extracted/cmdline-tools -Destination "$env:ANDROID_SDK_ROOT/cmdline-tools"
         Rename-Item "$env:ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" -NewName latest
+        Remove-Item commandline_tools.zip -ErrorAction Continue
 
         Write-Host "Installing Android NDK..."
         Set-Location "$env:ANDROID_SDK_ROOT/cmdline-tools/latest/bin/"
@@ -91,6 +93,14 @@ jobs:
         Write-Host "Waiting for AGDE installer to close..."
         Wait-Process agde_setup
         Remove-Item agde_setup.exe -ErrorAction Continue
+
+    - name: Install Oculus Mobile SDK
+      shell: pwsh
+      run: |
+        Write-Host "Downloading Oculus Mobile SDK 1.50..."
+        Invoke-WebRequest https://securecdn.oculus.com/binaries/download/?id=4643347799061523 -OutFile ovr_sdk_mobile_1.50.0.zip
+        Write-Host "Extracting Oculus SDK.."
+        Expand-Archive ovr_sdk_mobile_1.50.0.zip -DestinationPath The-Forge/Common_3/ThirdParty/OpenSource/ovr_sdk_mobile_1.46.0
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
