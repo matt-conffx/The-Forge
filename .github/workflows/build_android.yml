@@ -66,16 +66,6 @@ jobs:
       working-directory: The-Forge
       run: PRE_BUILD.bat
 
-    - name: Test Copy UT01 assets
-      working-directory: C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\01_Transformations
-      shell: cmd
-      run: |
-        xcopy "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\01_Transformations\..\..\UnitTestResources\Textures\circlepad.ktx" "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\Android-arm64-v8a\Release\01_Transformations\arm64-v8a\assets\Textures\" /s /y /d
-        xcopy "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\01_Transformations\..\..\UnitTestResources\Fonts\*.*" "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\Android-arm64-v8a\Release\01_Transformations\arm64-v8a\assets\Fonts\" /s /y /d
-        xcopy "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\01_Transformations\..\..\UnitTestResources\Scripts\*.*" "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\Android-arm64-v8a\Release\01_Transformations\arm64-v8a\assets\Scripts\" /s /y /d 
-        xcopy "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\Android-arm64-v8a\Release\OS\Shaders\" "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\Android-arm64-v8a\Release\01_Transformations\arm64-v8a\assets\Shaders\" /s /y /d
-        xcopy "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\01_Transformations\..\..\UnitTestResources\Textures\Skybox_*.ktx" "C:\TF\The-Forge\Examples_3\Unit_Tests\Android_VisualStudio2017\Android-arm64-v8a\Release\01_Transformations\arm64-v8a\assets\Textures\" /s /y /d
-
     - name: Checkout Custom-Middleware
       uses: actions/checkout@v3
       with:
