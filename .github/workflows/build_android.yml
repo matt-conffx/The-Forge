@@ -14,7 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2019, windows-2022]
-        skip_build_type: [--skipdebugbuild, --skipreleasebuild]
 
     runs-on: ${{ matrix.os }}
 
@@ -46,11 +45,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: The-Forge
-
-    - name: PRE_BUILD.bat
-      shell: cmd
-      working-directory: The-Forge
-      run: PRE_BUILD.bat
 
     - name: Checkout Custom-Middleware
       uses: actions/checkout@v3
@@ -108,9 +102,9 @@ jobs:
       run: Get-Volume
 
     - name: Build
-      working-directory: ${{ env.TF_WORKSPACE }}\The-Forge
+      working-directory: The-Forge
       shell: cmd
-      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --printbuildoutput --android ${{ matrix.skip_build_type }}
+      run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --printbuildoutput --android
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
 

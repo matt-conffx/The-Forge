@@ -3,6 +3,11 @@ name: "[Quest] Build TF Examples"
 on:
   push:
 
+env:
+  ANDROID_HOME: "D:\\Android\\android-sdk"
+  ANDROID_SDK_ROOT: "D:\\Android\\android-sdk"
+  TF_WORKSPACE: "C:\\TF\\"
+
 jobs:
   quest:
     strategy:
@@ -13,6 +18,29 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+    - name: Configure system for maximum build space
+      shell: pwsh
+      working-directory: C:\
+      run: |
+        # Print free space before
+        Get-Volume
+
+        # Remove original Android SDK, we install our own
+        Remove-Item -Path C:\Android -Recurse -ErrorAction Continue
+        # Remove VS2019, we use VS2017
+        Remove-Item -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019" -Recurse -ErrorAction Continue
+
+        # C drive has ~90GB free space, GITHUB_WORKSPACE only has ~14GB free space
+        New-Item -Path $env:TF_WORKSPACE\The-Forge -ItemType Directory
+        New-Item -Path $env:GITHUB_WORKSPACE\The-Forge -ItemType Junction -Value $env:TF_WORKSPACE\The-Forge -Force
+        New-Item -Path $env:TF_WORKSPACE\Custom-Middleware -ItemType Directory
+        New-Item -Path $env:GITHUB_WORKSPACE\Custom-Middleware -ItemType Junction -Value $env:TF_WORKSPACE\Custom-Middleware -Force
+        New-Item -Path D:\VulkanSDK -ItemType Directory
+        New-Item -Path C:\VulkanSDK -ItemType Junction -Value D:\VulkanSDK
+
+        # Print free space after
+        Get-Volume
+
     - name: Checkout The-Forge
       uses: actions/checkout@v3
       with:
@@ -25,11 +53,22 @@ jobs:
         repository: ConfettiFX/Custom-Middleware
         # ref: ${{ github.ref_name }}  # Checkout the Custom-Middleware branch with the same name as the The-Forge branch we're building
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2.0.8
-    - name: Install Android NDK
-      shell: cmd
-      run: sdkmanager.bat --install "ndk;21.4.7075529"
+    - name: Install Android SDK
+      shell: pwsh
+      run: |
+        Write-Host "Removing any old Android SDKs..."
+        Remove-Item -Path "$env:ANDROID_SDK_ROOT" -Recurse -ErrorAction Ignore
+        Write-Host "Downloading commandline-tools..."
+        Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip -OutFile commandline_tools.zip
+        Write-Host "Extracting commandline-tools..."
+        Expand-Archive commandline_tools.zip -DestinationPath commandline_tools_extracted
+        New-Item "$env:ANDROID_SDK_ROOT/cmdline-tools" -ItemType Directory
+        Move-Item -Path commandline_tools_extracted/cmdline-tools -Destination "$env:ANDROID_SDK_ROOT/cmdline-tools"
+        Rename-Item "$env:ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" -NewName latest
+
+        Write-Host "Installing Android NDK..."
+        Set-Location "$env:ANDROID_SDK_ROOT/cmdline-tools/latest/bin/"
+        Write-Output Y | .\sdkmanager.bat "ndk;21.4.7075529"
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -42,10 +81,25 @@ jobs:
     - name: Install VS2017
       run: choco install VisualStudio2017Community visualstudio2017-workload-nativedesktop visualstudio2017-workload-nativemobile
 
+    - name: Install Android Game Development Extension
+      shell: pwsh
+      run: |
+        Write-Host "Downloading AGDE..."
+        Invoke-WebRequest https://dl.google.com/android/agde/release/62/20220615-181705/AndroidGameDevelopmentExtensionSetup-v22.2.65.exe -OutFile agde_setup.exe
+        Write-Host "Starting AGDE installer..."
+        ./agde_setup.exe -quiet
+        Write-Host "Waiting for AGDE installer to close..."
+        Wait-Process agde_setup
+        Remove-Item agde_setup.exe -ErrorAction Continue
+
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
       with:
         vs-version: '[15.0,16.0)'
+
+    - name: "[DEBUG] Print free space"
+      shell: pwsh
+      run: Get-Volume
 
     - name: Build
       working-directory: The-Forge
@@ -53,3 +107,7 @@ jobs:
       run: python -u ./CI/PyBuild.py --preserveworkingdir --prebuild --printbuildoutput --quest
       env:
         VULKAN_SDK: "C:\\VulkanSDK\\1.2.162.0"
+
+    - name: "[DEBUG] Print free space"
+      shell: pwsh
+      run: Get-Volume
